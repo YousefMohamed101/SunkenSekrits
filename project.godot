@@ -21,3 +21,10 @@ project/assembly_name="Sunken Secrets"
 [editor]
 
 naming/script_name_casing=1
+
+[layer_names]
+
+3d_physics/layer_1="Terrain"
+3d_physics/layer_2="Enemy"
+3d_physics/layer_3="Player"
+3d_physics/layer_4="Item/Interactables"
