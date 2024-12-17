@@ -11,8 +11,17 @@ config_version=5
 [application]
 
 config/name="Sunken Secrets"
+run/main_scene="res://Assets/Scenes/SplashScreen.tscn"
 config/features=PackedStringArray("4.4", "C#", "Forward Plus")
+boot_splash/bg_color=Color(0.0572, 0.0836, 0.11, 1)
+boot_splash/image="uid://bul355e5pbivd"
+boot_splash/fullsize=false
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
 
 [dotnet]
 
