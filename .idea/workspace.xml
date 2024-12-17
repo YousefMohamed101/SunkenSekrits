@@ -5,19 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="12df3b90-c0b4-40c2-b456-abc8e198d105" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Audio/Background/AudioBootSplash.wav" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Audio/Background/AudioBootSplash.wav.import" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scenes/MainMenu.tscn" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scenes/Settings.tscn" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scenes/SplashScreen.tscn" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scenes/StartMenu.tscn" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/UI/BOOTSCREEN/TeamLogo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/UI/BOOTSCREEN/TeamLogo.png.import" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/UI/BOOTSCREEN/TeamLogoResize.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/UI/BOOTSCREEN/TeamLogoResize.png.import" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/splash_screen.tscn" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project.godot" beforeDir="false" afterPath="$PROJECT_DIR$/project.godot" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +14,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
@@ -39,7 +28,7 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "features",
+    "git-widget-placeholder": "main",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
