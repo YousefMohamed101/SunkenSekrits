@@ -31,6 +31,10 @@ project/assembly_name="Sunken Secrets"
 
 naming/script_name_casing=1
 
+[gui]
+
+theme/custom="uid://fdrwjbx02d0y"
+
 [layer_names]
 
 3d_physics/layer_1="Terrain"

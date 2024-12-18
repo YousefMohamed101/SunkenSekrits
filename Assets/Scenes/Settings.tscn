@@ -1,4 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://dc6llqqipsit"]
+[gd_scene load_steps=3 format=3 uid="uid://dc6llqqipsit"]
+
+[ext_resource type="Script" uid="uid://btttfefg6ucw" path="res://Scripts/UX/Settings.cs" id="1_6pjns"]
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_cye83"]
 color = Color(0, 0, 0, 0)
@@ -10,6 +12,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_6pjns")
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 1
@@ -32,9 +35,10 @@ theme_override_constants/separation = 2
 [node name="TabContainer" type="TabContainer" parent="CenterContainer/VBoxContainer"]
 custom_minimum_size = Vector2(700, 500)
 layout_mode = 2
-current_tab = 0
+current_tab = 1
 
 [node name="Graphic" type="TabBar" parent="CenterContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 0
 metadata/_tab_index = 0
@@ -117,12 +121,12 @@ size_flags_horizontal = 3
 max_value = 500.0
 
 [node name="Audio" type="TabBar" parent="CenterContainer/VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 size_flags_vertical = 0
 metadata/_tab_index = 1
 
 [node name="HSeparator" type="HSeparator" parent="CenterContainer/VBoxContainer/TabContainer/Audio"]
+layout_mode = 0
 offset_right = 700.0
 offset_bottom = 21.0
 theme_override_constants/separation = 21
@@ -143,10 +147,10 @@ theme_override_constants/separation = 20
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3"]
 layout_mode = 2
-theme_override_constants/separation = 300
+theme_override_constants/separation = 180
 
 [node name="MasterVolume" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3/HBoxContainer"]
-custom_minimum_size = Vector2(160, 0)
+custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 text = "Master Volume"
 
@@ -165,10 +169,10 @@ size_flags_horizontal = 3
 
 [node name="HBoxContainer6" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3"]
 layout_mode = 2
-theme_override_constants/separation = 299
+theme_override_constants/separation = 180
 
 [node name="VoiceVolume" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3/HBoxContainer6"]
-custom_minimum_size = Vector2(160, 0)
+custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 text = "Voice Volume"
 
@@ -187,10 +191,10 @@ size_flags_horizontal = 3
 
 [node name="HBoxContainer7" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3"]
 layout_mode = 2
-theme_override_constants/separation = 300
+theme_override_constants/separation = 180
 
 [node name="BackgroundVolume" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3/HBoxContainer7"]
-custom_minimum_size = Vector2(160, 0)
+custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 text = "Background Volume"
 
@@ -209,10 +213,10 @@ size_flags_horizontal = 3
 
 [node name="HBoxContainer8" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3"]
 layout_mode = 2
-theme_override_constants/separation = 300
+theme_override_constants/separation = 180
 
 [node name="SoundEffects" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3/HBoxContainer8"]
-custom_minimum_size = Vector2(160, 0)
+custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 text = "Sound Effects"
 
@@ -236,6 +240,7 @@ size_flags_vertical = 0
 metadata/_tab_index = 2
 
 [node name="HSeparator" type="HSeparator" parent="CenterContainer/VBoxContainer/TabContainer/Game"]
+layout_mode = 0
 offset_right = 700.0
 offset_bottom = 21.0
 theme_override_constants/separation = 21
@@ -255,7 +260,7 @@ layout_mode = 2
 
 [node name="HBoxContainer" type="BoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 460
+theme_override_constants/separation = 434
 
 [node name="Language" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
@@ -278,7 +283,7 @@ popup/item_3/id = 2
 
 [node name="HBoxContainer2" type="BoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 300
+theme_override_constants/separation = 256
 
 [node name="MouseSensitivity" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(160, 0)
@@ -300,7 +305,7 @@ size_flags_horizontal = 3
 
 [node name="HBoxContainer3" type="BoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 300
+theme_override_constants/separation = 400
 
 [node name="InvertControls" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/HBoxContainer3"]
 custom_minimum_size = Vector2(160, 0)
