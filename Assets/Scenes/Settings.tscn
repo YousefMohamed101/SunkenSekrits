@@ -35,10 +35,9 @@ theme_override_constants/separation = 2
 [node name="TabContainer" type="TabContainer" parent="CenterContainer/VBoxContainer"]
 custom_minimum_size = Vector2(700, 500)
 layout_mode = 2
-current_tab = 1
+current_tab = 0
 
 [node name="Graphic" type="TabBar" parent="CenterContainer/VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 size_flags_vertical = 0
 metadata/_tab_index = 0
@@ -67,7 +66,7 @@ theme_override_constants/separation = 20
 
 [node name="GridContainer" type="GridContainer" parent="CenterContainer/VBoxContainer/TabContainer/Graphic/MarginContainer"]
 layout_mode = 2
-theme_override_constants/h_separation = 450
+theme_override_constants/h_separation = 361
 theme_override_constants/v_separation = 10
 columns = 2
 
@@ -75,7 +74,7 @@ columns = 2
 layout_mode = 2
 text = "Window Mode"
 
-[node name="WindowModes" type="OptionButton" parent="CenterContainer/VBoxContainer/TabContainer/Graphic/MarginContainer/GridContainer"]
+[node name="WindowModeSelector" type="OptionButton" parent="CenterContainer/VBoxContainer/TabContainer/Graphic/MarginContainer/GridContainer"]
 layout_mode = 2
 selected = 0
 item_count = 2
@@ -88,7 +87,7 @@ popup/item_1/id = 1
 layout_mode = 2
 text = "Resolutions"
 
-[node name="Resolutions" type="OptionButton" parent="CenterContainer/VBoxContainer/TabContainer/Graphic/MarginContainer/GridContainer"]
+[node name="ResolutionSelector" type="OptionButton" parent="CenterContainer/VBoxContainer/TabContainer/Graphic/MarginContainer/GridContainer"]
 layout_mode = 2
 selected = 0
 item_count = 2
@@ -101,7 +100,7 @@ popup/item_1/id = 1
 layout_mode = 2
 text = "V-Sync"
 
-[node name="CheckButton" type="CheckButton" parent="CenterContainer/VBoxContainer/TabContainer/Graphic/MarginContainer/GridContainer"]
+[node name="VsyncCheck" type="CheckButton" parent="CenterContainer/VBoxContainer/TabContainer/Graphic/MarginContainer/GridContainer"]
 layout_mode = 2
 
 [node name="FrameLimit" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Graphic/MarginContainer/GridContainer"]
@@ -115,12 +114,13 @@ layout_mode = 2
 layout_mode = 2
 text = "0"
 
-[node name="HSlider" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Graphic/MarginContainer/GridContainer/HBoxContainer"]
+[node name="FrameLimitSlider" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Graphic/MarginContainer/GridContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 500.0
 
 [node name="Audio" type="TabBar" parent="CenterContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 0
 metadata/_tab_index = 1
@@ -141,95 +141,95 @@ offset_bottom = 56.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer"]
+[node name="AudioContolBoard" type="VBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3"]
+[node name="MasterVolumeField" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard"]
 layout_mode = 2
 theme_override_constants/separation = 180
 
-[node name="MasterVolume" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3/HBoxContainer"]
+[node name="MasterVolume" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/MasterVolumeField"]
 custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 text = "Master Volume"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3/HBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/MasterVolumeField"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
-[node name="Counter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3/HBoxContainer/HBoxContainer2"]
+[node name="Counter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/MasterVolumeField/HBoxContainer2"]
 layout_mode = 2
 text = "0"
 
-[node name="HSlider" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3/HBoxContainer/HBoxContainer2"]
+[node name="MasterVolumeSlider" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/MasterVolumeField/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainer6" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3"]
+[node name="VoiceVolumeField" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard"]
 layout_mode = 2
 theme_override_constants/separation = 180
 
-[node name="VoiceVolume" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3/HBoxContainer6"]
+[node name="VoiceVolume" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/VoiceVolumeField"]
 custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 text = "Voice Volume"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3/HBoxContainer6"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/VoiceVolumeField"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
-[node name="Counter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3/HBoxContainer6/HBoxContainer2"]
+[node name="Counter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/VoiceVolumeField/HBoxContainer2"]
 layout_mode = 2
 text = "0"
 
-[node name="HSlider" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3/HBoxContainer6/HBoxContainer2"]
+[node name="VoiceVolumeSlider" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/VoiceVolumeField/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainer7" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3"]
+[node name="BGMVolumeField" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard"]
 layout_mode = 2
 theme_override_constants/separation = 180
 
-[node name="BackgroundVolume" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3/HBoxContainer7"]
+[node name="BackgroundVolume" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/BGMVolumeField"]
 custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 text = "Background Volume"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3/HBoxContainer7"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/BGMVolumeField"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
-[node name="Counter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3/HBoxContainer7/HBoxContainer2"]
+[node name="Counter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/BGMVolumeField/HBoxContainer2"]
 layout_mode = 2
 text = "0"
 
-[node name="HSlider" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3/HBoxContainer7/HBoxContainer2"]
+[node name="BGMVolumeSlider" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/BGMVolumeField/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainer8" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3"]
+[node name="SoundEffectsField" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard"]
 layout_mode = 2
 theme_override_constants/separation = 180
 
-[node name="SoundEffects" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3/HBoxContainer8"]
+[node name="SoundEffects" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/SoundEffectsField"]
 custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 text = "Sound Effects"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3/HBoxContainer8"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/SoundEffectsField"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
-[node name="Counter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3/HBoxContainer8/HBoxContainer2"]
+[node name="Counter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/SoundEffectsField/HBoxContainer2"]
 layout_mode = 2
 text = "0"
 
-[node name="HSlider" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/VBoxContainer3/HBoxContainer8/HBoxContainer2"]
+[node name="SoundEffectsField" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/SoundEffectsField/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -258,16 +258,16 @@ size_flags_vertical = 4
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="BoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer"]
+[node name="LanguageField" type="BoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 434
 
-[node name="Language" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Language" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/LanguageField"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Language"
 
-[node name="LanguageChoice" type="OptionButton" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="LanguageSelector" type="OptionButton" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/LanguageField"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 selected = 0
@@ -281,38 +281,39 @@ popup/item_2/id = 1
 popup/item_3/text = "Malay"
 popup/item_3/id = 2
 
-[node name="HBoxContainer2" type="BoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer"]
+[node name="MouseSensetivityField" type="BoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 256
 
-[node name="MouseSensitivity" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="MouseSensitivity" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/MouseSensetivityField"]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 text = "Mouse Sensetivity"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/MouseSensetivityField"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
-[node name="Counter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="Counter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/MouseSensetivityField/HBoxContainer"]
 layout_mode = 2
 text = "0"
 
-[node name="HSlider" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="MouseSesitivitySlider" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/MouseSensetivityField/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
 
-[node name="HBoxContainer3" type="BoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer"]
+[node name="InvertControlsField" type="BoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 400
 
-[node name="InvertControls" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="InvertControls" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/InvertControlsField"]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 text = "Invert Controls"
 
-[node name="CheckButton" type="CheckButton" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="InvertButtonCheck" type="CheckButton" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/InvertControlsField"]
 layout_mode = 2
 
 [node name="KeyBinds" type="TabBar" parent="CenterContainer/VBoxContainer/TabContainer"]
@@ -354,7 +355,7 @@ custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 text = "Forward"
 
-[node name="Hotkey" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="ForwardHotkey" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 
@@ -367,7 +368,7 @@ custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 text = "Backward"
 
-[node name="Hotkey" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="BackwardHotkey" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 
@@ -380,7 +381,7 @@ custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 text = "Left"
 
-[node name="Hotkey" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="LeftHotkey" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/HBoxContainer3"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 
@@ -393,7 +394,7 @@ custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 text = "Right"
 
-[node name="Hotkey" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/HBoxContainer4"]
+[node name="RightHotkey" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/HBoxContainer4"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 
@@ -406,7 +407,7 @@ custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 text = "Jump"
 
-[node name="Hotkey" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/HBoxContainer5"]
+[node name="JumpHotkey" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/HBoxContainer5"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 
@@ -430,7 +431,7 @@ custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 text = "Use"
 
-[node name="Button" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer"]
+[node name="UseHotkey" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 
@@ -443,7 +444,7 @@ custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 text = "Interact"
 
-[node name="Button" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2"]
+[node name="InteractionHotKey" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 
@@ -456,7 +457,7 @@ custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 text = "Aim"
 
-[node name="Button" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
+[node name="AimHotKey" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 
@@ -466,7 +467,8 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 11
 
-[node name="Back" type="Button" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+[node name="SettingsBack" type="Button" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_vertical = 8

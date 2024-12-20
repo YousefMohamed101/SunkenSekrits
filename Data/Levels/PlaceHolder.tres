@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="LevelData" load_steps=2 format=3 uid="uid://bk1mawy3gy810"]
+
+[ext_resource type="Script" uid="uid://dcedfoqd1y6a2" path="res://Scripts/ResourcesCore/LevelData.cs" id="1_eesr8"]
+
+[resource]
+script = ExtResource("1_eesr8")
+sID = "PlaceHolder"
+sScenePath = "res://Assets/Scenes/PlaceHolder.tscn"
+metadata/_custom_type_script = ExtResource("1_eesr8")

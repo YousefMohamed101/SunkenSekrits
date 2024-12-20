@@ -18,10 +18,15 @@ boot_splash/image="uid://bul355e5pbivd"
 boot_splash/fullsize=false
 config/icon="res://icon.svg"
 
+[autoload]
+
+SceneTransitionManager="*res://Assets/Scenes/SingleTonNodes/SceneTransitionManager.tscn"
+
 [display]
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
+window/size/mode=3
 
 [dotnet]
 
