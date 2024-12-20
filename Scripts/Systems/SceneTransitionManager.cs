@@ -14,18 +14,17 @@ public partial class SceneTransitionManager : Node
         Error
     }
 
-    private Dictionary<String,LevelData> dictSceneCataloge = new Dictionary<String,LevelData>();
+    
     private ColorRect crColorRect;
     private CanvasLayer clCanvasLayer;
     private AnimationPlayer apAnimPlayer;
     private LoadingStates eCurrentLoadingState = LoadingStates.Idle;
-    private string sDataPath = "res://Data/Levels/";
+    private string sDataPath ;
     private PackedScene psLoadedScene;
-    
+    private LevelData lData;
     public override void _Ready()
     {
         PersistantLoad();
-        LoadScenesDB();
         Instance = this;
         
     }
@@ -33,7 +32,8 @@ public partial class SceneTransitionManager : Node
     public async void TransitionToScene(string sSceneID)
     {
         crColorRect.Visible = true;
-        if (!dictSceneCataloge.ContainsKey(sSceneID))
+        lData = DataBaseManager.Instance.GetLevel(sSceneID);
+        if (lData == null)
         {
             GD.PrintErr("Scene " + sSceneID + " not found");
             return;
@@ -41,7 +41,7 @@ public partial class SceneTransitionManager : Node
         apAnimPlayer.Play("FadeOut");
         await ToSignal(apAnimPlayer, "animation_finished");
 
-        bool bLoadCheck = await LoadScene(dictSceneCataloge[sSceneID].sScenePath);
+        bool bLoadCheck = await LoadScene(lData.sScenePath);
 
         if (bLoadCheck && psLoadedScene != null)
         {
@@ -96,7 +96,7 @@ public partial class SceneTransitionManager : Node
                 if (status == ResourceLoader.ThreadLoadStatus.InProgress)
                 {
                     eCurrentLoadingState = LoadingStates.Loading;
-                    GD.PrintErr("Resource still in process at" + sScenePath);
+                    //GD.PrintErr("Resource still in process at" + sScenePath);
                     
                 }
             }
@@ -114,31 +114,7 @@ public partial class SceneTransitionManager : Node
     
 
  
-    private void LoadScenesDB()
-    {
-        dictSceneCataloge.Clear();
-        var levels = DirAccess.Open(sDataPath);
-
-
-        if (levels != null)
-        {
-            levels.ListDirBegin();
-            var FileName = levels.GetNext();
-            while (FileName != "")
-            {
-
-                if (FileName.EndsWith(".tres"))
-                {
-                    string sfullpath = sDataPath + FileName;
-                    var resource = GD.Load<LevelData>(sfullpath);
-                    dictSceneCataloge[resource.sID] = resource;
-                }
-
-                FileName = levels.GetNext();
-            }
-            
-        }
-    }
+    
 
     private void PersistantLoad()
     {
