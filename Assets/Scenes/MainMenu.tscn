@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://deffmc6217nn4"]
+[gd_scene load_steps=4 format=3 uid="uid://deffmc6217nn4"]
 
 [ext_resource type="PackedScene" uid="uid://dc6llqqipsit" path="res://Assets/Scenes/Settings.tscn" id="1_hywc3"]
 [ext_resource type="Script" uid="uid://2g5lp0hunt2i" path="res://Scripts/UX/MainMenu.cs" id="1_pi1tf"]
+[ext_resource type="AudioStream" uid="uid://cgti2rrh83knd" path="res://Assets/Audio/SoundFX/ButtonHover.ogg" id="3_ldl0q"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -54,6 +55,7 @@ text = "Load Game"
 
 [node name="SaveGame" type="Button" parent="MenuHub/VBoxContainer/Label2"]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(300, 50)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -80,3 +82,8 @@ text = "Quit Game"
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
+
+[node name="UISFX" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("3_ldl0q")
+bus = &"SFX"

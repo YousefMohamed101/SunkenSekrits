@@ -36,3 +36,4 @@ texture = ExtResource("1_fqced")
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_y71ml")
 autoplay = true
+bus = &"BGM"

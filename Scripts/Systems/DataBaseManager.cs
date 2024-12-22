@@ -1,16 +1,22 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+
+
 public partial class DataBaseManager : Node
 {
     public static DataBaseManager Instance;
     
-    private string sLevelDataPath = "res://Data/Levels/";
+
     private Dictionary<String,LevelData> dictLevelDB = new Dictionary<String,LevelData>();
-    
+    private string sLevelDataPath = "res://Data/Levels/";
     public override void _Ready()
     {
+        
+        
         LoadLevelData();
+        
+        
         Instance = this;
     }
     private void LoadLevelData()

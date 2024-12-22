@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="SettingData" load_steps=2 format=3 uid="uid://f7nq68c5ja8r"]
+
+[ext_resource type="Script" uid="uid://b1e8xocpplwp7" path="res://Scripts/ResourcesCore/SettingData.cs" id="1_swqaa"]
+
+[resource]
+script = ExtResource("1_swqaa")
+sID = "DefaultSettings"
+sLanguage = "en"
+sForwardButton = "W"
+sBackwardButton = "S"
+sLeftButton = "A"
+sRightButton = "D"
+sJumpButton = "Space"
+sAimButton = "Right Click"
+sUseButton = "Left Click"
+sInteractButton = "F"
+fMasterV = 1.0
+fBGMV = 1.0
+fSFXV = 1.0
+fVoicesV = 1.0
+fFrameLimit = 60.0
+fMouseSensitivity = 0.5
+fFOV = 80.0
+iWindowModeIndex = 0
+iGameResIndex = 0
+bVSyncEnabled = true
+bInvertedControls = false
+metadata/_custom_type_script = ExtResource("1_swqaa")

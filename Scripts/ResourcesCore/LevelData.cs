@@ -6,4 +6,9 @@ public partial class LevelData : Resource
 {
     [Export] public String sID;
     [Export] public String sScenePath;
+
+    public string GetID()
+    {
+        return sID;
+    }
 }

@@ -35,9 +35,10 @@ theme_override_constants/separation = 2
 [node name="TabContainer" type="TabContainer" parent="CenterContainer/VBoxContainer"]
 custom_minimum_size = Vector2(700, 500)
 layout_mode = 2
-current_tab = 0
+current_tab = 1
 
 [node name="Graphic" type="TabBar" parent="CenterContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 0
 metadata/_tab_index = 0
@@ -75,6 +76,7 @@ layout_mode = 2
 text = "Window Mode"
 
 [node name="WindowModeSelector" type="OptionButton" parent="CenterContainer/VBoxContainer/TabContainer/Graphic/MarginContainer/GridContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 selected = 0
 item_count = 2
@@ -88,6 +90,7 @@ layout_mode = 2
 text = "Resolutions"
 
 [node name="ResolutionSelector" type="OptionButton" parent="CenterContainer/VBoxContainer/TabContainer/Graphic/MarginContainer/GridContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 selected = 0
 item_count = 2
@@ -101,6 +104,7 @@ layout_mode = 2
 text = "V-Sync"
 
 [node name="VsyncCheck" type="CheckButton" parent="CenterContainer/VBoxContainer/TabContainer/Graphic/MarginContainer/GridContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="FrameLimit" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Graphic/MarginContainer/GridContainer"]
@@ -115,12 +119,13 @@ layout_mode = 2
 text = "0"
 
 [node name="FrameLimitSlider" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Graphic/MarginContainer/GridContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
 max_value = 500.0
 
 [node name="Audio" type="TabBar" parent="CenterContainer/VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 size_flags_vertical = 0
 metadata/_tab_index = 1
@@ -159,13 +164,19 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
-[node name="Counter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/MasterVolumeField/HBoxContainer2"]
+[node name="MasterCounter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/MasterVolumeField/HBoxContainer2"]
+custom_minimum_size = Vector2(35, 0)
 layout_mode = 2
 text = "0"
 
 [node name="MasterVolumeSlider" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/MasterVolumeField/HBoxContainer2"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+value = 1.0
 
 [node name="VoiceVolumeField" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard"]
 layout_mode = 2
@@ -181,13 +192,19 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
-[node name="Counter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/VoiceVolumeField/HBoxContainer2"]
+[node name="VoiceCounter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/VoiceVolumeField/HBoxContainer2"]
+custom_minimum_size = Vector2(35, 0)
 layout_mode = 2
 text = "0"
 
 [node name="VoiceVolumeSlider" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/VoiceVolumeField/HBoxContainer2"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+value = 1.0
 
 [node name="BGMVolumeField" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard"]
 layout_mode = 2
@@ -204,12 +221,18 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
 [node name="Counter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/BGMVolumeField/HBoxContainer2"]
+custom_minimum_size = Vector2(35, 0)
 layout_mode = 2
 text = "0"
 
 [node name="BGMVolumeSlider" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/BGMVolumeField/HBoxContainer2"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.1
+value = 1.0
 
 [node name="SoundEffectsField" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard"]
 layout_mode = 2
@@ -226,12 +249,18 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
 [node name="Counter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/SoundEffectsField/HBoxContainer2"]
+custom_minimum_size = Vector2(35, 0)
 layout_mode = 2
 text = "0"
 
-[node name="SoundEffectsField" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/SoundEffectsField/HBoxContainer2"]
+[node name="SFXVolumeSlider" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/SoundEffectsField/HBoxContainer2"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+value = 1.0
 
 [node name="Game" type="TabBar" parent="CenterContainer/VBoxContainer/TabContainer"]
 visible = false
@@ -478,3 +507,7 @@ text = "Back"
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 text = "Default Settings"
+
+[node name="SettingUISFX" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+bus = &"SFX"

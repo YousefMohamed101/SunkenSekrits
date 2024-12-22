@@ -10,7 +10,9 @@ public partial class MainMenu : Control
     private Button btnQuitGame;
     private Settings settSettings;
     private CenterContainer ccMenuHub;
+    private AudioStreamPlayer aspUISFX;
     private int iSelectedMenu = 0;
+
 
     public override void _Ready()
     {
@@ -20,7 +22,9 @@ public partial class MainMenu : Control
         btnSettings = GetNode<Button>("%SettingsButton");
         btnQuitGame = GetNode<Button>("%QuitGame");
         ccMenuHub = GetNode<CenterContainer>("%MenuHub");
-        var ComponentCheck = GetChildren();
+        aspUISFX = GetNode<AudioStreamPlayer>("%UISFX");
+
+        var ComponentCheck = this.GetChildren();
         foreach (var component in ComponentCheck)
         {
             if (component is Settings)
@@ -30,13 +34,15 @@ public partial class MainMenu : Control
                 btnSettings.Pressed += GetSettingsHandling;
                 btnSettings.Visible = true;
             }
-            else
-            {
-                btnSettings.Visible = false;
-            }
+            
         }
 
-        btnNewGame.Pressed += ()=> SceneTransitionManager.Instance.TransitionToScene("PlaceHolder");
+        btnNewGame.MouseEntered += ()=> aspUISFX.Play();
+        btnLoadGame.MouseEntered += ()=> aspUISFX.Play();
+        btnSaveGame.MouseEntered += () => aspUISFX.Play();
+        btnSettings.MouseEntered += () => aspUISFX.Play();
+        btnQuitGame.MouseEntered += () => aspUISFX.Play();
+        btnNewGame.Pressed += ()=> SceneTransitionManager.Instance.TransitionToScene("MainLevel");
         btnQuitGame.Pressed += ()=> GetTree().Quit();
     }
 
