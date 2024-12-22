@@ -35,10 +35,9 @@ theme_override_constants/separation = 2
 [node name="TabContainer" type="TabContainer" parent="CenterContainer/VBoxContainer"]
 custom_minimum_size = Vector2(700, 500)
 layout_mode = 2
-current_tab = 1
+current_tab = 0
 
 [node name="Graphic" type="TabBar" parent="CenterContainer/VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 size_flags_vertical = 0
 metadata/_tab_index = 0
@@ -67,8 +66,8 @@ theme_override_constants/separation = 20
 
 [node name="GridContainer" type="GridContainer" parent="CenterContainer/VBoxContainer/TabContainer/Graphic/MarginContainer"]
 layout_mode = 2
-theme_override_constants/h_separation = 361
-theme_override_constants/v_separation = 10
+theme_override_constants/h_separation = 329
+theme_override_constants/v_separation = 15
 columns = 2
 
 [node name="Window" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Graphic/MarginContainer/GridContainer"]
@@ -103,9 +102,18 @@ popup/item_1/id = 1
 layout_mode = 2
 text = "V-Sync"
 
-[node name="VsyncCheck" type="CheckButton" parent="CenterContainer/VBoxContainer/TabContainer/Graphic/MarginContainer/GridContainer"]
+[node name="VSyncSelector" type="OptionButton" parent="CenterContainer/VBoxContainer/TabContainer/Graphic/MarginContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+alignment = 1
+selected = 0
+item_count = 3
+popup/item_0/text = "Disabled"
+popup/item_0/id = 0
+popup/item_1/text = "Enable"
+popup/item_1/id = 1
+popup/item_2/text = "Adaptive"
+popup/item_2/id = 2
 
 [node name="FrameLimit" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Graphic/MarginContainer/GridContainer"]
 layout_mode = 2
@@ -113,8 +121,10 @@ text = "FrameLimit"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Graphic/MarginContainer/GridContainer"]
 layout_mode = 2
+theme_override_constants/separation = 0
 
 [node name="Counter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Graphic/MarginContainer/GridContainer/HBoxContainer"]
+custom_minimum_size = Vector2(35, 0)
 layout_mode = 2
 text = "0"
 
@@ -126,6 +136,7 @@ size_flags_vertical = 4
 max_value = 500.0
 
 [node name="Audio" type="TabBar" parent="CenterContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 0
 metadata/_tab_index = 1
@@ -312,7 +323,7 @@ popup/item_3/id = 2
 
 [node name="MouseSensetivityField" type="BoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 256
+theme_override_constants/separation = 235
 
 [node name="MouseSensitivity" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/MouseSensetivityField"]
 custom_minimum_size = Vector2(160, 0)
@@ -325,13 +336,18 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
 [node name="Counter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/MouseSensetivityField/HBoxContainer"]
+custom_minimum_size = Vector2(55, 0)
 layout_mode = 2
-text = "0"
+text = "0.22"
 
 [node name="MouseSesitivitySlider" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/MouseSensetivityField/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+value = 1.0
 
 [node name="InvertControlsField" type="BoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer"]
 layout_mode = 2
