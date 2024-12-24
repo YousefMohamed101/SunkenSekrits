@@ -1,6 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://ceuii5uyoayj0"]
+[gd_scene load_steps=9 format=3 uid="uid://ceuii5uyoayj0"]
 
-[ext_resource type="PackedScene" uid="uid://cq6uahja8g6xc" path="res://Assets/Scenes/Entities/PlayerScene.tscn" id="1_leg7y"]
+[ext_resource type="PackedScene" uid="uid://cq6uahja8g6xc" path="res://Assets/Scenes/Entities/Player.tscn" id="1_leg7y"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_leg7y"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -25,6 +25,8 @@ material = SubResource("StandardMaterial3D_7k80c")
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_7k80c"]
 points = PackedVector3Array(-1, 0, -1, -1, 0, 1, 1, 0, -1, 1, 0, 1)
 
+[sub_resource type="BoxMesh" id="BoxMesh_leg7y"]
+
 [node name="PlaceHolder" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -46,4 +48,16 @@ skeleton = NodePath("../..")
 transform = Transform3D(30, 0, 0, 0, 30, 0, 0, 0, 30, 0, 0, 0)
 shape = SubResource("ConvexPolygonShape3D_7k80c")
 
-[node name="PlayerScene" parent="." instance=ExtResource("1_leg7y")]
+[node name="StaticBody3D2" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.911126, 0.5, -3.28471)
+mesh = SubResource("BoxMesh_leg7y")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D2"]
+transform = Transform3D(30, 0, 0, 0, 30, 0, 0, 0, 30, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_7k80c")
+
+[node name="Player" parent="." instance=ExtResource("1_leg7y")]

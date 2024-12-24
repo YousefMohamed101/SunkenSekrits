@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://cq6uahja8g6xc"]
+
+[ext_resource type="Script" uid="uid://db1lg7ntmiudl" path="res://Scripts/Core/Player.cs" id="1_d605g"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_yuaxj"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yuaxj"]
+radius = 0.52
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("PlayerCamera", "MovementDirectionGuide", "YawNode", "PitchNode")]
+collision_layer = 2
+script = ExtResource("1_d605g")
+PlayerCamera = NodePath("Yaw/Pitch/PlayerView")
+MovementDirectionGuide = NodePath("MovementDirection")
+YawNode = NodePath("Yaw")
+PitchNode = NodePath("Yaw/Pitch")
+
+[node name="Yaw" type="Node3D" parent="."]
+
+[node name="Pitch" type="Node3D" parent="Yaw"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.77259, 0)
+
+[node name="PlayerView" type="Camera3D" parent="Yaw/Pitch"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_yuaxj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_yuaxj")
+
+[node name="MovementDirection" type="Marker3D" parent="."]
