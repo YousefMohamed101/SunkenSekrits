@@ -61,7 +61,7 @@ public partial class Player : CharacterBody3D
 			CalcVelocity.Z = 0.0f;
 		}
 		
-		 Velocity = CalcVelocity;
+		Velocity = CalcVelocity;
 		MoveAndSlide();
 		
 
@@ -72,7 +72,7 @@ public partial class Player : CharacterBody3D
 		if (@event is InputEventMouseMotion eventMouseMotion)
 		{
 			
-			Vector2 MousePosC = eventMouseMotion.Relative/300 * Mathf.Pi;
+			Vector2 MousePosC = eventMouseMotion.Relative/1080 * Mathf.Pi;
 			
 			YawNode.RotateY(-MousePosC.X);
 			float clampedPitch = Mathf.Clamp(PitchNode.Rotation.X - MousePosC.Y, -Mathf.Pi / 2, Mathf.Pi / 2); 

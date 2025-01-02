@@ -5,6 +5,7 @@ public partial class SplashScreen : Control
 {
     public override void _Ready()
     {
-        SceneTransitionManager.Instance.TransitionToScene("StartMenu");
+        GetNode<AnimationPlayer>("AnimationPlayer").Play("LogoFade");
+        GetNode<Timer>("TranstionStarter").Timeout += ()=> SceneTransitionManager.Instance.TransitionToScene("StartMenu");
     }
 }
