@@ -1,7 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://b70jca6a8h6v1"]
+[gd_scene load_steps=18 format=3 uid="uid://b70jca6a8h6v1"]
 
 [ext_resource type="PackedScene" uid="uid://deffmc6217nn4" path="res://Assets/Scenes/MainMenu.tscn" id="1_tj6n7"]
 [ext_resource type="AudioStream" uid="uid://dtmk1vnpafnd1" path="res://Assets/Audio/Ambience/StartMenuAmbience.wav" id="2_66ct0"]
+[ext_resource type="PackedScene" uid="uid://depsncw4npkkj" path="res://Assets/3DModels/Terrain/Island/island_Scene.tscn" id="4_1v1em"]
+[ext_resource type="AudioStream" uid="uid://ccmo7ciyc3xeg" path="res://Assets/Audio/Background/oceanic-depths.mp3" id="5_2psqu"]
+[ext_resource type="PackedScene" uid="uid://c1ws2thvf1qrq" path="res://Assets/3DModels/Terrain/Menu_Beach/Menu_Beach_Scene.tscn" id="5_gxg3r"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_66ct0"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -39,11 +42,6 @@ albedo_color = Color(1, 0, 0, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_46hbq"]
 albedo_color = Color(0.0666667, 0.588235, 0.756863, 1)
 
-[sub_resource type="PrismMesh" id="PrismMesh_46hbq"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1v1em"]
-albedo_color = Color(0.592157, 0.486275, 0.32549, 1)
-
 [node name="StartMenu" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -52,49 +50,67 @@ environment = SubResource("Environment_1v1em")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
 
-[node name="Beach" type="MeshInstance3D" parent="."]
+[node name="Terrain" type="Node3D" parent="."]
+
+[node name="Beach" type="MeshInstance3D" parent="Terrain"]
 transform = Transform3D(20, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+visible = false
 mesh = SubResource("QuadMesh_tj6n7")
+skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_66ct0")
 
-[node name="Tank" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0.798221, 0.207986, -0.477754)
+[node name="Tank" type="MeshInstance3D" parent="Terrain"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 1.59704, 0.297951, -0.477754)
 mesh = SubResource("CylinderMesh_66ct0")
+skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_2psqu")
 
-[node name="Fins" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.0957727, 0, -0.0863035, 0, 0.1, 0, 0.0287678, 0, 0.287318, 0.533505, 0.0530546, -0.336673)
+[node name="Fins" type="MeshInstance3D" parent="Terrain"]
+transform = Transform3D(0.0957727, 0, -0.0863035, 0, 0.1, 0, 0.0287678, 0, 0.287318, 1.17201, 0.143019, -0.336673)
 mesh = SubResource("BoxMesh_66ct0")
+skeleton = NodePath("../..")
 
-[node name="Fins2" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.0957727, 0, -0.0863035, 0, 0.1, 0, 0.0287678, 0, 0.287318, 0.420061, 0.0530546, -0.384615)
+[node name="Fins2" type="MeshInstance3D" parent="Terrain"]
+transform = Transform3D(0.0957727, 0, -0.0863035, 0, 0.1, 0, 0.0287678, 0, 0.287318, 1.06251, 0.143019, -0.384615)
 mesh = SubResource("BoxMesh_66ct0")
+skeleton = NodePath("../..")
 
-[node name="Jacket" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.15, 0, 0, 0, -0.0376026, 0.14521, 0, -0.14521, -0.0376026, 0.841481, 0.13849, -0.327276)
+[node name="Jacket" type="MeshInstance3D" parent="Terrain"]
+transform = Transform3D(0.15, 0, 0, 0, -0.0376026, 0.14521, 0, -0.14521, -0.0376026, 1.58788, 0.228455, -0.327276)
 mesh = SubResource("TorusMesh_46hbq")
+skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_gxg3r")
 
-[node name="Water" type="MeshInstance3D" parent="."]
-transform = Transform3D(100, 0, 0, 0, -3.19316e-06, 3, 0, -73.051, -1.31134e-07, 0, 0, -36.992)
+[node name="Water" type="MeshInstance3D" parent="Terrain"]
+transform = Transform3D(4018.28, 0, 0, 0, -0.000125064, 9.467, 0, -2861.13, -4.13816e-07, 0, 0, -36.992)
 mesh = SubResource("QuadMesh_66ct0")
+skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_46hbq")
 metadata/_edit_group_ = true
 
-[node name="Island" type="MeshInstance3D" parent="."]
-transform = Transform3D(9.29661, 0, 3.68417, 0, 10, 0, -3.68417, 0, 9.29661, -32.5127, 0.505288, -52.8651)
-mesh = SubResource("PrismMesh_46hbq")
-surface_material_override/0 = SubResource("StandardMaterial3D_1v1em")
-metadata/_edit_group_ = true
+[node name="Island" parent="Terrain" instance=ExtResource("4_1v1em")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -844.364, -2.04919, -797.41)
+
+[node name="Menu_Beach" parent="Terrain" instance=ExtResource("5_gxg3r")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.157309, 0.382658, 0.6224)
+transform = Transform3D(1, 0, 0, 0, 0.999808, 0.0195988, 0, -0.0195988, 0.999808, -0.0855084, 0.853506, 0.949121)
+fov = 90.9
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="MainMenu" parent="CanvasLayer" instance=ExtResource("1_tj6n7")]
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="Ambient" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_66ct0")
+volume_db = -15.0
+autoplay = true
+bus = &"SFX"
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_2psqu")
+volume_db = -15.0
 autoplay = true
 bus = &"BGM"
+parameters/looping = true

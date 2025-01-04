@@ -110,6 +110,8 @@ public partial class Settings : Control
         SetSettingRuntime(SaveAndLoadManager.Instance.GetDefaultSetting());
         
     }
+    
+    // Function to set and initialize all setting and update the system
     private void SetSettingRuntime(SettingData InputSettingData)
     {
         AudioSlidersChange(InputSettingData.fMasterV,0);
@@ -124,7 +126,6 @@ public partial class Settings : Control
         SetLanguage(InputSettingData.iLanguage);
     }
     
-    //Load Setting Data from setting resource
     private void LoadUserSettings()
     {
         UserSettingData = SaveAndLoadManager.Instance.GetUserSetting();
