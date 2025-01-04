@@ -89,7 +89,6 @@ metadata/_edit_group_ = true
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.157309, 0.382658, 0.6224)
-fov = 37.8493
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

@@ -97,7 +97,7 @@ public partial class SceneTransitionManager : Node
                 {
                     eCurrentLoadingState = LoadingStates.Loading;
                     //GD.PrintErr("Resource still in process at" + sScenePath);
-                    await Task.Delay(10);
+                    //await Task.Delay(10);
                 }
             }
 
