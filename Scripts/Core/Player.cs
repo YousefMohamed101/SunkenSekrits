@@ -3,17 +3,19 @@ using System;
 
 public partial class Player : CharacterBody3D
 {
-	[Export] private float fRunMultiplier = 1.5f;
-	[Export] private float fMoveMentSpeed = 5.0f;
-	[Export] private float fJumpForce = 5.0f;
+	[Export] private float RunMultiplier = 1.5f;
+	[Export] private float MoveMentSpeed = 5.0f;
+	[Export] private float JumpForce = 5.0f;
 	[Export] private Camera3D PlayerCamera;
     private float MousePositionX;
     private float MousePositionY;
 	private Vector2 MoveMentDirection;
 	private Vector3 MoveMentDirectionTranslation;
+	private Vector3 CalcVelocity;
 	[Export] private Node3D YawNode;
 	[Export] private Node3D PitchNode;
-	private Vector3 CalcVelocity;
+	
+	
 	
 	public override void _Ready()
 	{
@@ -22,7 +24,7 @@ public partial class Player : CharacterBody3D
 
 	public override void _Process(double delta)
 	{
-		
+
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -35,23 +37,23 @@ public partial class Player : CharacterBody3D
 
 		if (IsOnFloor()&& Input.IsActionPressed("Jump"))
 		{
-			CalcVelocity.Y = fJumpForce;
+			CalcVelocity.Y = JumpForce;
 		}
 		MoveMentDirection = Input.GetVector("Move_Left", "Move_Right","Move_Backward", "Move_Forward");
 		//MoveMentDirectionTranslation = (Transform.Basis * new Vector3(MoveMentDirection.X, 0, -MoveMentDirection.Y)).Normalized();
 		
 		MoveMentDirectionTranslation = MoveMentDirection.X * YawNode.Basis.X - MoveMentDirection.Y * YawNode.Basis.Z;
-		MoveMentDirectionTranslation.Y = 0;
+		
 		
 		if (MoveMentDirectionTranslation != Vector3.Zero)
 		{
 
-			CalcVelocity.X = MoveMentDirectionTranslation.X * fMoveMentSpeed;
-			CalcVelocity.Z = MoveMentDirectionTranslation.Z * fMoveMentSpeed;
+			CalcVelocity.X = MoveMentDirectionTranslation.X * MoveMentSpeed;
+			CalcVelocity.Z = MoveMentDirectionTranslation.Z * MoveMentSpeed;
 			if (Input.IsActionPressed("Run"))
 			{
-				CalcVelocity.X = MoveMentDirectionTranslation.X * fMoveMentSpeed * fRunMultiplier;
-				CalcVelocity.Z = MoveMentDirectionTranslation.Z * fMoveMentSpeed * fRunMultiplier;
+				CalcVelocity.X = MoveMentDirectionTranslation.X * MoveMentSpeed * RunMultiplier;
+				CalcVelocity.Z = MoveMentDirectionTranslation.Z * MoveMentSpeed * RunMultiplier;
 			}
 
 		}
@@ -72,7 +74,7 @@ public partial class Player : CharacterBody3D
 		if (@event is InputEventMouseMotion eventMouseMotion)
 		{
 			
-			Vector2 MousePosC = eventMouseMotion.Relative/1080 * Mathf.Pi;
+			Vector2 MousePosC = (eventMouseMotion.Relative/1080 * Mathf.Pi)*0.5f;
 			
 			YawNode.RotateY(-MousePosC.X);
 			float clampedPitch = Mathf.Clamp(PitchNode.Rotation.X - MousePosC.Y, -Mathf.Pi / 2, Mathf.Pi / 2); 
