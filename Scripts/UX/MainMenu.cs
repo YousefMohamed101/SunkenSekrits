@@ -1,61 +1,61 @@
 using Godot;
-using System;
+using Godot.Collections;
 
 public partial class MainMenu : Control
 {
-    private Button btnNewGame;
-    private Button btnLoadGame;
-    private Button btnSaveGame;
-    private Button btnSettings;
-    private Button btnQuitGame;
-    private Settings settSettings;
-    private CenterContainer ccMenuHub;
-    private AudioStreamPlayer aspUISFX;
-    private int iSelectedMenu = 0;
-
+    private Button _newGameButton;
+    private Button _loadGameButton;
+    private Button _saveGameButton;
+    private Button _settingsButton;
+    private Button _quitGameButton;
+    private Settings _settingsInitialize;
+    private CenterContainer _menuHubCenterContainer;
+    private AudioStreamPlayer _uisfxStreamPlayer;
+    private int _selectedMenu;
+    private Array<Node> _menuCheck;
 
     public override void _Ready()
     {
-        btnNewGame = GetNode<Button>("%NewGame");
-        btnLoadGame = GetNode<Button>("%LoadGame");
-        btnSaveGame = GetNode<Button>("%SaveGame");
-        btnSettings = GetNode<Button>("%SettingsButton");
-        btnQuitGame = GetNode<Button>("%QuitGame");
-        ccMenuHub = GetNode<CenterContainer>("%MenuHub");
-        aspUISFX = GetNode<AudioStreamPlayer>("%UISFX");
+        _newGameButton = GetNode<Button>("%NewGame");
+        _loadGameButton = GetNode<Button>("%LoadGame");
+        _saveGameButton = GetNode<Button>("%SaveGame");
+        _settingsButton = GetNode<Button>("%SettingsButton");
+        _quitGameButton = GetNode<Button>("%QuitGame");
+        _menuHubCenterContainer = GetNode<CenterContainer>("%MenuHub");
+        _uisfxStreamPlayer = GetNode<AudioStreamPlayer>("%UISFX");
 
-        var ComponentCheck = this.GetChildren();
-        foreach (var component in ComponentCheck)
+        _menuCheck = this.GetChildren();
+        foreach (var component in _menuCheck)
         {
             if (component is Settings)
             {
-                settSettings = GetNode<Settings>("%Settings");
-                settSettings.SettingReturn += GetSettingsHandling;
-                btnSettings.Pressed += GetSettingsHandling;
-                btnSettings.Visible = true;
+                _settingsInitialize = GetNode<Settings>("%Settings");
+                _settingsInitialize.SettingReturn += GetSettingsInitializeButtonHandling;
+                _settingsButton.Pressed += GetSettingsInitializeButtonHandling;
+                _settingsButton.Visible = true;
             }
             
         }
 
-        btnNewGame.MouseEntered += ()=> aspUISFX.Play();
-        btnLoadGame.MouseEntered += ()=> aspUISFX.Play();
-        btnSaveGame.MouseEntered += () => aspUISFX.Play();
-        btnSettings.MouseEntered += () => aspUISFX.Play();
-        btnQuitGame.MouseEntered += () => aspUISFX.Play();
-        btnNewGame.Pressed += ()=> SceneTransitionManager.Instance.TransitionToScene("MainLevel");
-        btnQuitGame.Pressed += ()=> GetTree().Quit();
+        _newGameButton.MouseEntered += ()=> _uisfxStreamPlayer.Play();
+        _loadGameButton.MouseEntered += ()=> _uisfxStreamPlayer.Play();
+        _saveGameButton.MouseEntered += () => _uisfxStreamPlayer.Play();
+        _settingsButton.MouseEntered += () => _uisfxStreamPlayer.Play();
+        _quitGameButton.MouseEntered += () => _uisfxStreamPlayer.Play();
+        _newGameButton.Pressed += ()=> SceneTransitionManager.Instance.TransitionToScene("MainLevel");
+        _quitGameButton.Pressed += ()=> GetTree().Quit();
     }
 
-    private void GetSettingsHandling()
+    private void GetSettingsInitializeButtonHandling()
     {
-        if(iSelectedMenu == 0){
-            ccMenuHub.Visible = false;
-            settSettings.Open();
-            iSelectedMenu = 1;
-        }else if(iSelectedMenu == 1){
-            ccMenuHub.Visible = true;
-            settSettings.Close();
-            iSelectedMenu = 0;
+        if(_selectedMenu == 0){
+            _menuHubCenterContainer.Visible = false;
+            _settingsInitialize.Open();
+            _selectedMenu = 1;
+        }else if(_selectedMenu == 1){
+            _menuHubCenterContainer.Visible = true;
+            _settingsInitialize.Close();
+            _selectedMenu = 0;
         }
     }
     

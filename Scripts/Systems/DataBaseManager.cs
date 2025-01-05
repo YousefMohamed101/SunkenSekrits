@@ -8,8 +8,8 @@ public partial class DataBaseManager : Node
     public static DataBaseManager Instance;
     
 
-    private Dictionary<String,LevelData> dictLevelDB = new Dictionary<String,LevelData>();
-    private string sLevelDataPath = "res://Data/Levels/";
+    private Dictionary<String,LevelData> _levelDb = new Dictionary<String,LevelData>();
+    private string _levelDataResources = "res://Data/Levels/";
     public override void _Ready()
     {
         
@@ -21,33 +21,33 @@ public partial class DataBaseManager : Node
     }
     private void LoadLevelData()
     {
-        dictLevelDB.Clear();
-        var levels = DirAccess.Open(sLevelDataPath);
+        _levelDb.Clear();
+        var levels = DirAccess.Open(_levelDataResources);
 
 
         if (levels != null)
         {
             levels.ListDirBegin();
-            var FileName = levels.GetNext();
-            while (FileName != "")
+            var fileName = levels.GetNext();
+            while (fileName != "")
             {
 
-                if (FileName.EndsWith(".tres"))
+                if (fileName.EndsWith(".tres"))
                 {
-                    string sfullpath = sLevelDataPath + FileName;
+                    string sfullpath = _levelDataResources + fileName;
                     var resource = GD.Load<LevelData>(sfullpath);
-                    dictLevelDB[resource.sID] = resource;
+                    _levelDb[resource.Id] = resource;
                 }
 
-                FileName = levels.GetNext();
+                fileName = levels.GetNext();
             }
             
         }
     }
 
-    public LevelData GetLevel(string sLevelName)
+    public LevelData GetLevel(string levelId)
     {
-        LevelData levelData = dictLevelDB[sLevelName];
+        LevelData levelData = _levelDb[levelId];
         return levelData;
     }
 }

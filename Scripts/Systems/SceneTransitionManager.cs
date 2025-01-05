@@ -1,6 +1,5 @@
 using Godot;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 public partial class SceneTransitionManager : Node
 {
@@ -15,13 +14,12 @@ public partial class SceneTransitionManager : Node
     }
 
     
-    private ColorRect crColorRect;
-    private CanvasLayer clCanvasLayer;
-    private AnimationPlayer apAnimPlayer;
-    private LoadingStates eCurrentLoadingState = LoadingStates.Idle;
-    private string sDataPath ;
-    private PackedScene psLoadedScene;
-    private LevelData lData;
+    private ColorRect _colorRect;
+    private CanvasLayer _canvasLayer;
+    private AnimationPlayer _animPlayer;
+    private LoadingStates _currentLoadingState = LoadingStates.Idle;
+    private PackedScene _loadedScene;
+    private LevelData _levelData;
     public override void _Ready()
     {
         PersistantLoad();
@@ -29,73 +27,73 @@ public partial class SceneTransitionManager : Node
         
     }
 
-    public async void TransitionToScene(string sSceneID)
+    public async void TransitionToScene(string sceneId)
     {
-        crColorRect.Visible = true;
-        lData = DataBaseManager.Instance.GetLevel(sSceneID);
-        if (lData == null)
+        _colorRect.Visible = true;
+        _levelData = DataBaseManager.Instance.GetLevel(sceneId);
+        if (_levelData == null)
         {
-            GD.PrintErr("Scene " + sSceneID + " not found");
+            GD.PrintErr("Scene " + sceneId + " not found");
             return;
         }
-        apAnimPlayer.Play("FadeOut");
-        await ToSignal(apAnimPlayer, "animation_finished");
+        _animPlayer.Play("FadeOut");
+        await ToSignal(_animPlayer, "animation_finished");
 
-        bool bLoadCheck = await LoadScene(lData.sScenePath);
+        bool bLoadCheck = await LoadScene(_levelData.ScenePath);
 
-        if (bLoadCheck && psLoadedScene != null)
+        if (bLoadCheck && _loadedScene != null)
         {
             
-            GetTree().ChangeSceneToPacked(psLoadedScene);
-            apAnimPlayer.Play("FadeIn");
-            crColorRect.Visible = false;
+            GetTree().ChangeSceneToPacked(_loadedScene);
+            _animPlayer.Play("FadeIn");
+            _colorRect.Visible = false;
         }
         else
         {
-            apAnimPlayer.Play("FadeIn");
-            GD.PrintErr("Failed to change the Scene to ",$"{sSceneID}");
-            crColorRect.Visible = false;
+            _animPlayer.Play("FadeIn");
+            GD.PrintErr("Failed to change the Scene to ",$"{sceneId}");
+            _colorRect.Visible = false;
         }
     }
 
-    private async Task<bool> LoadScene(string sScenePath)
+    private Task<bool> LoadScene(string scenePath)
     {
         
-        eCurrentLoadingState = LoadingStates.Loading;
-        GD.Print("Loading " + sScenePath);
+        _currentLoadingState = LoadingStates.Loading;
+        GD.Print("Loading " + scenePath);
         try
         {
             
-            ResourceLoader.LoadThreadedRequest(sScenePath);
-            while (eCurrentLoadingState == LoadingStates.Loading)
+            ResourceLoader.LoadThreadedRequest(scenePath);
+            while (_currentLoadingState == LoadingStates.Loading)
             {
                 
-                var status = ResourceLoader.LoadThreadedGetStatus(sScenePath);
+                var status = ResourceLoader.LoadThreadedGetStatus(scenePath);
                 
                 if (status == ResourceLoader.ThreadLoadStatus.Loaded)
                 {
                     
-                    eCurrentLoadingState = LoadingStates.Loaded;
-                    psLoadedScene = (PackedScene)ResourceLoader.LoadThreadedGet(sScenePath);
+                    _currentLoadingState = LoadingStates.Loaded;
+                    _loadedScene = (PackedScene)ResourceLoader.LoadThreadedGet(scenePath);
                     
-                    return true;
+                    return Task.FromResult(true);
                 }
 
                 if (status == ResourceLoader.ThreadLoadStatus.Failed)
                 {
-                    eCurrentLoadingState = LoadingStates.Error;
-                    GD.PrintErr("Error loading scene: " + sScenePath);
-                    return false;
+                    _currentLoadingState = LoadingStates.Error;
+                    GD.PrintErr("Error loading scene: " + scenePath);
+                    return Task.FromResult(false);
                 }
                 if (status == ResourceLoader.ThreadLoadStatus.InvalidResource)
                 {
-                    eCurrentLoadingState = LoadingStates.Error;
-                    GD.PrintErr("Invalid Resorce at: " + sScenePath);
-                    return false;
+                    _currentLoadingState = LoadingStates.Error;
+                    GD.PrintErr("Invalid Resorce at: " + scenePath);
+                    return Task.FromResult(false);
                 }
                 if (status == ResourceLoader.ThreadLoadStatus.InProgress)
                 {
-                    eCurrentLoadingState = LoadingStates.Loading;
+                    _currentLoadingState = LoadingStates.Loading;
                     //GD.PrintErr("Resource still in process at" + sScenePath);
                     //await Task.Delay(10);
                 }
@@ -105,10 +103,10 @@ public partial class SceneTransitionManager : Node
         } catch (Exception e)
         {
             GD.PrintErr($"Exception during scene loading: {e.Message}");
-            eCurrentLoadingState = LoadingStates.Error;
-            return false;
+            _currentLoadingState = LoadingStates.Error;
+            return Task.FromResult(false);
         }
-        return false;
+        return Task.FromResult(false);
     }
     
     
@@ -118,12 +116,12 @@ public partial class SceneTransitionManager : Node
 
     private void PersistantLoad()
     {
-        clCanvasLayer = GetNode<CanvasLayer>("%CurtainHolder");
-        clCanvasLayer.Layer = 100;
-        crColorRect = GetNode<ColorRect>("%CurtainTransition");
-        crColorRect.Modulate = new Color(Colors.Black, 0);
-        crColorRect.Visible = false;
-        apAnimPlayer = GetNode<AnimationPlayer>("%TranstionAnimationManager");
+        _canvasLayer = GetNode<CanvasLayer>("%CurtainHolder");
+        _canvasLayer.Layer = 100;
+        _colorRect = GetNode<ColorRect>("%CurtainTransition");
+        _colorRect.Modulate = new Color(Colors.Black, 0);
+        _colorRect.Visible = false;
+        _animPlayer = GetNode<AnimationPlayer>("%TranstionAnimationManager");
 
     }
 

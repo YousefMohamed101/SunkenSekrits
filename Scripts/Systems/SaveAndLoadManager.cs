@@ -1,13 +1,12 @@
 using Godot;
-using System;
 
 public partial class SaveAndLoadManager : Node
 {
 	public static SaveAndLoadManager Instance;
-	private SettingData DefaultSetting = GD.Load<SettingData>("res://Data/SettingsData/DefaultSetting.tres");
-	private SettingData UserSetting;
-	private string sUserSettingPath= "user://Data/UserSetting.tres";
-	private string sDataPath= "user://Data";
+	private SettingData _defaultSetting = GD.Load<SettingData>("res://Data/SettingsData/DefaultSetting.tres");
+	private SettingData _userSetting;
+	private string _userSettingPath= "user://Data/UserSetting.tres";
+	private string _dataFolderPath= "user://Data";
 	public override void _Ready()
 	{
 		InitializeUserData();
@@ -18,37 +17,37 @@ public partial class SaveAndLoadManager : Node
 	private void InitializeUserData()
 	{
 		
-		if (DirAccess.DirExistsAbsolute(sDataPath) != true)
+		if (DirAccess.DirExistsAbsolute(_dataFolderPath) != true)
 		{
-			DirAccess.MakeDirAbsolute(sDataPath);
+			DirAccess.MakeDirAbsolute(_dataFolderPath);
 		}
 
-		if (FileAccess.FileExists(sUserSettingPath) != true)
+		if (FileAccess.FileExists(_userSettingPath) != true)
 		{
-			UserSetting = DefaultSetting;
-			UserSetting.sID = "UserSetting";
-			ResourceSaver.Save(UserSetting, sUserSettingPath);
+			_userSetting = _defaultSetting;
+			_userSetting.ID = "UserSetting";
+			ResourceSaver.Save(_userSetting, _userSettingPath);
 		}
 		else
 		{
-			UserSetting = ResourceLoader.Load<SettingData>(sUserSettingPath);
+			_userSetting = ResourceLoader.Load<SettingData>(_userSettingPath);
 		}
 	}
 	public SettingData GetUserSetting()
 	{
-		UserSetting = ResourceLoader.Load<SettingData>(sUserSettingPath);
-		return UserSetting;
+		_userSetting = ResourceLoader.Load<SettingData>(_userSettingPath);
+		return _userSetting;
 	}
-	public void SaveUserSetting(SettingData RuntimeSetting)
+	public void SaveUserSetting(SettingData runtimeSetting)
 	{
 		
-		ResourceSaver.Save(RuntimeSetting, sUserSettingPath);
+		ResourceSaver.Save(runtimeSetting, _userSettingPath);
 		
 	}
 
 	public SettingData GetDefaultSetting()
 	{
-		return DefaultSetting;
+		return _defaultSetting;
 	}
 	
 }

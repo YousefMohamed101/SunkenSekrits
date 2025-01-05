@@ -4,11 +4,11 @@ using System;
 [GlobalClass]
 public partial class LevelData : Resource
 {
-    [Export] public String sID;
-    [Export] public String sScenePath;
+    [Export] public String Id;
+    [Export] public String ScenePath;
 
-    public string GetID()
+    public string GetId()
     {
-        return sID;
+        return Id;
     }
 }

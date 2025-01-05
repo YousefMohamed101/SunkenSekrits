@@ -1,19 +1,17 @@
 using Godot;
-using System;
 
 public partial class Player : CharacterBody3D
 {
-	[Export] private float RunMultiplier = 1.5f;
-	[Export] private float MoveMentSpeed = 5.0f;
-	[Export] private float JumpForce = 5.0f;
-	[Export] private Camera3D PlayerCamera;
-    private float MousePositionX;
-    private float MousePositionY;
-	private Vector2 MoveMentDirection;
-	private Vector3 MoveMentDirectionTranslation;
-	private Vector3 CalcVelocity;
-	[Export] private Node3D YawNode;
-	[Export] private Node3D PitchNode;
+	[Export] private float _speedMultiplier = 1.5f;
+	[Export] private float _movementSpeed = 5.0f;
+	[Export] private float _jumpForce = 5.0f;
+	[Export] private Camera3D _playerCamera;
+	private Vector2 _movementDirection;
+	private Vector2 _mousePosC;
+	private Vector3 _movementDirectionTranslation;
+	private Vector3 _calcVelocity;
+	[Export] private Node3D _yawNode;
+	[Export] private Node3D _pitchNode;
 	
 	
 	
@@ -29,41 +27,41 @@ public partial class Player : CharacterBody3D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		CalcVelocity = Velocity;
+		_calcVelocity = Velocity;
 		if (!IsOnFloor())
 		{
-			CalcVelocity += GetGravity() * (float)delta;
+			_calcVelocity += GetGravity() * (float)delta;
 		}
 
 		if (IsOnFloor()&& Input.IsActionPressed("Jump"))
 		{
-			CalcVelocity.Y = JumpForce;
+			_calcVelocity.Y = _jumpForce;
 		}
-		MoveMentDirection = Input.GetVector("Move_Left", "Move_Right","Move_Backward", "Move_Forward");
-		//MoveMentDirectionTranslation = (Transform.Basis * new Vector3(MoveMentDirection.X, 0, -MoveMentDirection.Y)).Normalized();
+		_movementDirection = Input.GetVector("Move_Left", "Move_Right","Move_Backward", "Move_Forward");
+		//MovementDirectionTranslation = (Transform.Basis * new Vector3(MovementDirection.X, 0, -MovementDirection.Y)).Normalized();
 		
-		MoveMentDirectionTranslation = MoveMentDirection.X * YawNode.Basis.X - MoveMentDirection.Y * YawNode.Basis.Z;
+		_movementDirectionTranslation = _movementDirection.X * _yawNode.Basis.X - _movementDirection.Y * _yawNode.Basis.Z;
 		
 		
-		if (MoveMentDirectionTranslation != Vector3.Zero)
+		if (_movementDirectionTranslation != Vector3.Zero)
 		{
 
-			CalcVelocity.X = MoveMentDirectionTranslation.X * MoveMentSpeed;
-			CalcVelocity.Z = MoveMentDirectionTranslation.Z * MoveMentSpeed;
+			_calcVelocity.X = _movementDirectionTranslation.X * _movementSpeed;
+			_calcVelocity.Z = _movementDirectionTranslation.Z * _movementSpeed;
 			if (Input.IsActionPressed("Run"))
 			{
-				CalcVelocity.X = MoveMentDirectionTranslation.X * MoveMentSpeed * RunMultiplier;
-				CalcVelocity.Z = MoveMentDirectionTranslation.Z * MoveMentSpeed * RunMultiplier;
+				_calcVelocity.X = _movementDirectionTranslation.X * _movementSpeed * _speedMultiplier;
+				_calcVelocity.Z = _movementDirectionTranslation.Z * _movementSpeed * _speedMultiplier;
 			}
 
 		}
 		else
 		{
-			CalcVelocity.X = 0.0f;
-			CalcVelocity.Z = 0.0f;
+			_calcVelocity.X = 0.0f;
+			_calcVelocity.Z = 0.0f;
 		}
 		
-		Velocity = CalcVelocity;
+		Velocity = _calcVelocity;
 		MoveAndSlide();
 		
 
@@ -74,14 +72,14 @@ public partial class Player : CharacterBody3D
 		if (@event is InputEventMouseMotion eventMouseMotion)
 		{
 			
-			Vector2 MousePosC = (eventMouseMotion.Relative/1080 * Mathf.Pi)*0.5f;
+			_mousePosC = (eventMouseMotion.Relative/1080 * Mathf.Pi)*0.5f;
 			
-			YawNode.RotateY(-MousePosC.X);
-			float clampedPitch = Mathf.Clamp(PitchNode.Rotation.X - MousePosC.Y, -Mathf.Pi / 2, Mathf.Pi / 2); 
-			PitchNode.Rotation = new Vector3(clampedPitch, PitchNode.Rotation.Y, PitchNode.Rotation.Z); 
+			_yawNode.RotateY(-_mousePosC.X);
+			float clampedPitch = Mathf.Clamp(_pitchNode.Rotation.X - _mousePosC.Y, -Mathf.Pi / 2, Mathf.Pi / 2); 
+			_pitchNode.Rotation = new Vector3(clampedPitch, _pitchNode.Rotation.Y, _pitchNode.Rotation.Z); 
 			
 			
-			MousePositionX -= eventMouseMotion.Relative.X;
+			//_mousePositionX -= eventMouseMotion.Relative.X;
 			//MousePositionY -= eventMouseMotion.Relative.Y*0.5f;
 			//MousePositionY = Mathf.Clamp(MousePositionY, -89f, 89f);
 			//PlayerCamera.GlobalRotationDegrees = new Vector3(_pitch, _yaw, 0);

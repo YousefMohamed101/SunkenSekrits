@@ -1,30 +1,29 @@
 using Godot;
-using System;
 
 [GlobalClass]
 public partial class SettingData : Resource
 {
- [Export] public string sID;
- [Export] public string sForwardButton;
- [Export] public string sBackwardButton;
- [Export] public string sLeftButton;
- [Export] public string sRightButton;
- [Export] public string sJumpButton;
- [Export] public string sAimButton;
- [Export] public string sUseButton;
- [Export] public string sInteractButton;
- [Export] public float fMasterV;
- [Export] public float fBGMV;
- [Export] public float fSFXV;
- [Export] public float fVoicesV;
- [Export] public float fFrameLimit;
- [Export] public float fMouseSensitivity;
- [Export] public float fFOV;
- [Export] public int iLanguage;
- [Export] public int iWindowModeIndex;
- [Export] public int iGameResIndex;
- [Export] public int iVSync;
- [Export] public bool bInvertedControls;
+ [Export] public string ID;
+ [Export] public string ForwardButton;
+ [Export] public string BackwardButton;
+ [Export] public string LeftButton;
+ [Export] public string RightButton;
+ [Export] public string JumpButton;
+ [Export] public string AimButton;
+ [Export] public string UseButton;
+ [Export] public string InteractButton;
+ [Export] public float MasterVolume;
+ [Export] public float BgmVolume;
+ [Export] public float SfxVolume;
+ [Export] public float VoicesVolume;
+ [Export] public float FrameLimit;
+ [Export] public float MouseSensitivity;
+ [Export] public float Fov;
+ [Export] public int Language;
+ [Export] public int WindowModeIndex;
+ [Export] public int GameResIndex;
+ [Export] public int VSync;
+ [Export] public bool InvertedMode;
  
  
  public void ScreenWindowinit(int x)
