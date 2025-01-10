@@ -4,6 +4,6 @@
 
 [resource]
 script = ExtResource("1_pr7dq")
-sID = "StartMenu"
-sScenePath = "res://Assets/Scenes/StartMenu.tscn"
+Id = "StartMenu"
+ScenePath = "res://Assets/Scenes/StartMenu.tscn"
 metadata/_custom_type_script = ExtResource("1_pr7dq")

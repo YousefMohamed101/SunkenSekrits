@@ -1,16 +1,19 @@
 using Godot;
+using Godot.Collections;
 
 [GlobalClass]
 public partial class SettingData : Resource {
 	[Export] public string Id;
-	[Export] public string ForwardButton;
-	[Export] public string BackwardButton;
-	[Export] public string LeftButton;
-	[Export] public string RightButton;
-	[Export] public string JumpButton;
-	[Export] public string AimButton;
-	[Export] public string UseButton;
-	[Export] public string InteractButton;
+	[Export] public InputEvent ForwardButton;
+	[Export] public InputEvent BackwardButton;
+	[Export] public InputEvent LeftButton;
+	[Export] public InputEvent RightButton;
+	[Export] public InputEvent JumpButton;
+	[Export] public InputEvent RunButton;
+	[Export] public InputEvent CrouchButton;
+	[Export] public InputEvent InteractButton;
+	[Export] public InputEvent AimButton;
+	[Export] public InputEvent UseButton;
 	[Export] public float MasterVolume;
 	[Export] public float BgmVolume;
 	[Export] public float SfxVolume;
@@ -23,7 +26,7 @@ public partial class SettingData : Resource {
 	[Export] public int GameResIndex;
 	[Export] public int VSync;
 	[Export] public bool InvertedMode;
-
+	
 
 	public void ScreenWindowinit(int x) {
 		if(x == 0) {

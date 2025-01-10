@@ -7,13 +7,12 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yuaxj"]
 radius = 0.52
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("PlayerCamera", "MovementDirectionGuide", "YawNode", "PitchNode")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("_playerCamera", "_yawNode", "_pitchNode")]
 collision_layer = 2
 script = ExtResource("1_d605g")
-PlayerCamera = NodePath("Yaw/Pitch/PlayerView")
-MovementDirectionGuide = NodePath("MovementDirection")
-YawNode = NodePath("Yaw")
-PitchNode = NodePath("Yaw/Pitch")
+_playerCamera = NodePath("Yaw/Pitch/PlayerView")
+_yawNode = NodePath("Yaw")
+_pitchNode = NodePath("Yaw/Pitch")
 
 [node name="Yaw" type="Node3D" parent="."]
 

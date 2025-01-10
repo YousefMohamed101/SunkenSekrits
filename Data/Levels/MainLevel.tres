@@ -4,6 +4,6 @@
 
 [resource]
 script = ExtResource("1_eesr8")
-sID = "MainLevel"
-sScenePath = "res://Assets/Scenes/MainLevel.tscn"
+Id = "MainLevel"
+ScenePath = "res://Assets/Scenes/MainLevel.tscn"
 metadata/_custom_type_script = ExtResource("1_eesr8")

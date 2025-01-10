@@ -33,11 +33,11 @@ public partial class Player : CharacterBody3D
 			_calcVelocity += GetGravity() * (float)delta;
 		}
 
-		if (IsOnFloor()&& Input.IsActionPressed("Jump"))
+		if (IsOnFloor()&& Input.IsActionPressed("Jump (Movement)"))
 		{
 			_calcVelocity.Y = _jumpForce;
 		}
-		_movementDirection = Input.GetVector("Move_Left", "Move_Right","Move_Backward", "Move_Forward");
+		_movementDirection = Input.GetVector("Left (Movement)", "Right (Movement)","Backward (Movement)", "Forward (Movement)");
 		//MovementDirectionTranslation = (Transform.Basis * new Vector3(MovementDirection.X, 0, -MovementDirection.Y)).Normalized();
 		
 		_movementDirectionTranslation = _movementDirection.X * _yawNode.Basis.X - _movementDirection.Y * _yawNode.Basis.Z;
@@ -48,7 +48,7 @@ public partial class Player : CharacterBody3D
 
 			_calcVelocity.X = _movementDirectionTranslation.X * _movementSpeed;
 			_calcVelocity.Z = _movementDirectionTranslation.Z * _movementSpeed;
-			if (Input.IsActionPressed("Run"))
+			if (Input.IsActionPressed("Run (Movement)"))
 			{
 				_calcVelocity.X = _movementDirectionTranslation.X * _movementSpeed * _speedMultiplier;
 				_calcVelocity.Z = _movementDirectionTranslation.Z * _movementSpeed * _speedMultiplier;

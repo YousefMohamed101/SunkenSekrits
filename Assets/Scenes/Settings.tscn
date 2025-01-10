@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://dc6llqqipsit"]
+[gd_scene load_steps=4 format=3 uid="uid://dc6llqqipsit"]
 
 [ext_resource type="Script" uid="uid://btttfefg6ucw" path="res://Scripts/UX/Settings.cs" id="1_6pjns"]
+[ext_resource type="PackedScene" uid="uid://bys2ydjwfyjfw" path="res://Assets/UI/UI_Scenes/Key_Bind_Scene.tscn" id="2_8aywk"]
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_cye83"]
 color = Color(0, 0, 0, 0)
@@ -13,6 +14,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6pjns")
+_keybindfield = ExtResource("2_8aywk")
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 custom_minimum_size = Vector2(800, 0)
@@ -37,7 +39,7 @@ theme_override_constants/separation = 5
 [node name="TabContainer" type="TabContainer" parent="CenterContainer/VBoxContainer"]
 custom_minimum_size = Vector2(700, 500)
 layout_mode = 2
-current_tab = 3
+current_tab = 2
 
 [node name="Graphic" type="TabBar" parent="CenterContainer/VBoxContainer/TabContainer"]
 visible = false
@@ -233,10 +235,11 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
 [node name="MasterCounter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/MasterVolumeField/HBoxContainer2"]
-custom_minimum_size = Vector2(35, 0)
+custom_minimum_size = Vector2(55, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "0"
+horizontal_alignment = 2
 
 [node name="MasterVolumeSlider" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/MasterVolumeField/HBoxContainer2"]
 unique_name_in_owner = true
@@ -263,10 +266,11 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
 [node name="VoiceCounter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/VoiceVolumeField/HBoxContainer2"]
-custom_minimum_size = Vector2(35, 0)
+custom_minimum_size = Vector2(55, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "0"
+horizontal_alignment = 2
 
 [node name="VoiceVolumeSlider" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/VoiceVolumeField/HBoxContainer2"]
 unique_name_in_owner = true
@@ -293,10 +297,11 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
 [node name="Counter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/BGMVolumeField/HBoxContainer2"]
-custom_minimum_size = Vector2(35, 0)
+custom_minimum_size = Vector2(55, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "0"
+horizontal_alignment = 2
 
 [node name="BGMVolumeSlider" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/BGMVolumeField/HBoxContainer2"]
 unique_name_in_owner = true
@@ -304,7 +309,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 max_value = 1.0
-step = 0.1
+step = 0.01
 value = 1.0
 
 [node name="SoundEffectsField" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard"]
@@ -323,10 +328,11 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
 [node name="Counter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/SoundEffectsField/HBoxContainer2"]
-custom_minimum_size = Vector2(35, 0)
+custom_minimum_size = Vector2(55, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "0"
+horizontal_alignment = 2
 
 [node name="SFXVolumeSlider" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/SoundEffectsField/HBoxContainer2"]
 unique_name_in_owner = true
@@ -338,7 +344,6 @@ step = 0.01
 value = 1.0
 
 [node name="Game" type="TabBar" parent="CenterContainer/VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 size_flags_vertical = 0
 metadata/_tab_index = 2
@@ -370,7 +375,7 @@ size_flags_vertical = 0
 [node name="LanguageField" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 380
+theme_override_constants/separation = 300
 
 [node name="Language" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/LanguageField"]
 custom_minimum_size = Vector2(279, 45)
@@ -414,10 +419,11 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
 [node name="Counter" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/MouseSensetivityField/HBoxContainer"]
-custom_minimum_size = Vector2(55, 0)
+custom_minimum_size = Vector2(65, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
-text = "0.22"
+text = "1"
+horizontal_alignment = 2
 
 [node name="MouseSesitivitySlider" type="HSlider" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/MouseSensetivityField/HBoxContainer"]
 unique_name_in_owner = true
@@ -425,12 +431,12 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 max_value = 1.0
-step = 0.01
+step = 0.1
 value = 1.0
 
 [node name="InvertControlsField" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 425
+theme_override_constants/separation = 360
 
 [node name="InvertControls" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/InvertControlsField"]
 custom_minimum_size = Vector2(279, 45)
@@ -443,6 +449,7 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [node name="KeyBinds" type="TabBar" parent="CenterContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 0
 metadata/_tab_index = 3
@@ -464,142 +471,41 @@ grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 20
+theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 
-[node name="Movement" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/ScrollContainer"]
+layout_mode = 2
+
+[node name="Movement" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 32
 text = "Movement"
 
-[node name="HBoxContainer" type="BoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 9
-theme_override_constants/separation = 500
-
-[node name="Forward" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Forward"
-
-[node name="ForwardHotkey" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(100, 0)
+[node name="HSeparator" type="HSeparator" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer2" type="BoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 9
-theme_override_constants/separation = 500
-
-[node name="Backward" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/HBoxContainer2"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Backward"
-
-[node name="BackwardHotkey" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/HBoxContainer2"]
-custom_minimum_size = Vector2(100, 0)
+[node name="MovementBinds" type="VBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="HBoxContainer3" type="BoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 9
-theme_override_constants/separation = 500
-
-[node name="Left" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/HBoxContainer3"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Left"
-
-[node name="LeftHotkey" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/HBoxContainer3"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-
-[node name="HBoxContainer4" type="BoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 9
-theme_override_constants/separation = 500
-
-[node name="Right" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/HBoxContainer4"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Right"
-
-[node name="RightHotkey" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/HBoxContainer4"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-
-[node name="HBoxContainer5" type="BoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 9
-theme_override_constants/separation = 500
-
-[node name="Jump" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/HBoxContainer5"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Jump"
-
-[node name="JumpHotkey" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/HBoxContainer5"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-
-[node name="Actions" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer"]
+[node name="Actions" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 32
 text = "Actions"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer"]
+[node name="HSeparator2" type="HSeparator" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 500
-
-[node name="Use" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Use"
-
-[node name="UseHotkey" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 500
-
-[node name="interact" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Interact"
-
-[node name="InteractionHotKey" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 500
-
-[node name="Aim" type="Label" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer3"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Aim"
-
-[node name="AimHotKey" type="Button" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer3"]
-custom_minimum_size = Vector2(100, 0)
+[node name="ActionBinds" type="VBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/KeyBinds/MarginContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]

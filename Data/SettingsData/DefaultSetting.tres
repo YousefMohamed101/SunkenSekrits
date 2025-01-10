@@ -1,28 +1,75 @@
-[gd_resource type="Resource" script_class="SettingData" load_steps=2 format=3 uid="uid://f7nq68c5ja8r"]
+[gd_resource type="Resource" script_class="SettingData" load_steps=12 format=3 uid="uid://f7nq68c5ja8r"]
 
 [ext_resource type="Script" uid="uid://b1e8xocpplwp7" path="res://Scripts/ResourcesCore/SettingData.cs" id="1_swqaa"]
 
+[sub_resource type="InputEventMouseButton" id="InputEventMouseButton_swqaa"]
+button_index = 2
+
+[sub_resource type="InputEventKey" id="InputEventKey_2iwmt"]
+device = -1
+keycode = 83
+unicode = 115
+
+[sub_resource type="InputEventKey" id="InputEventKey_swqaa"]
+device = -1
+keycode = 67
+unicode = 99
+
+[sub_resource type="InputEventKey" id="InputEventKey_q7ngc"]
+device = -1
+keycode = 87
+unicode = 119
+
+[sub_resource type="InputEventKey" id="InputEventKey_4814p"]
+device = -1
+keycode = 69
+unicode = 101
+
+[sub_resource type="InputEventKey" id="InputEventKey_umggd"]
+device = -1
+keycode = 32
+unicode = 32
+
+[sub_resource type="InputEventKey" id="InputEventKey_035av"]
+device = -1
+keycode = 65
+unicode = 97
+
+[sub_resource type="InputEventKey" id="InputEventKey_4lfq7"]
+device = -1
+keycode = 68
+unicode = 100
+
+[sub_resource type="InputEventKey" id="InputEventKey_ifdr5"]
+device = -1
+keycode = 4194325
+
+[sub_resource type="InputEventMouseButton" id="InputEventMouseButton_ifdr5"]
+button_index = 1
+
 [resource]
 script = ExtResource("1_swqaa")
-sID = "DefaultSettings"
-sLanguage = "en"
-sForwardButton = "W"
-sBackwardButton = "S"
-sLeftButton = "A"
-sRightButton = "D"
-sJumpButton = "Space"
-sAimButton = "Right Click"
-sUseButton = "Left Click"
-sInteractButton = "F"
-fMasterV = 1.0
-fBGMV = 1.0
-fSFXV = 1.0
-fVoicesV = 1.0
-fFrameLimit = 60.0
-fMouseSensitivity = 0.5
-fFOV = 80.0
-iWindowModeIndex = 0
-iGameResIndex = 0
-bVSyncEnabled = true
-bInvertedControls = false
+Id = "Default Setting"
+ForwardButton = SubResource("InputEventKey_q7ngc")
+BackwardButton = SubResource("InputEventKey_2iwmt")
+LeftButton = SubResource("InputEventKey_035av")
+RightButton = SubResource("InputEventKey_4lfq7")
+JumpButton = SubResource("InputEventKey_umggd")
+RunButton = SubResource("InputEventKey_ifdr5")
+CrouchButton = SubResource("InputEventKey_swqaa")
+InteractButton = SubResource("InputEventKey_4814p")
+AimButton = SubResource("InputEventMouseButton_swqaa")
+UseButton = SubResource("InputEventMouseButton_ifdr5")
+MasterVolume = 1.0
+BgmVolume = 1.0
+SfxVolume = 1.0
+VoicesVolume = 1.0
+FrameLimit = 60.0
+MouseSensitivity = 1.0
+Fov = 80.0
+Language = 0
+WindowModeIndex = 0
+GameResIndex = 0
+VSync = 0
+InvertedMode = false
 metadata/_custom_type_script = ExtResource("1_swqaa")
