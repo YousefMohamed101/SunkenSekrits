@@ -61,3 +61,9 @@ transform = Transform3D(30, 0, 0, 0, 30, 0, 0, 0, 30, 0, 0, 0)
 shape = SubResource("ConvexPolygonShape3D_7k80c")
 
 [node name="Player" parent="." instance=ExtResource("1_leg7y")]
+_movementSpeed = 3.0
+_jumpHeight = 8.95
+_jumpTP = 0.8
+_jumpTD = 0.65
+
+[editable path="Player"]

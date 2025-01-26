@@ -21,7 +21,7 @@ public partial class MainMenu : Control {
 		_quitGameButton = GetNode<Button>("%QuitGame");
 		_menuHubCenterContainer = GetNode<CenterContainer>("%MenuHub");
 		_uisfxStreamPlayer = GetNode<AudioStreamPlayer>("%UISFX");
-
+		
 		_menuCheck = this.GetChildren();
 		foreach(var component in _menuCheck) {
 			if(component is Settings) {
@@ -32,12 +32,20 @@ public partial class MainMenu : Control {
 			}
 		}
 
+		if(GameManager.Instance.gamestate == true) {
+			_saveGameButton.Show();
+			_loadGameButton.Hide();
+			_newGameButton.Hide();
+			
+		} else {
+			_saveGameButton.Hide();
+		}
 		_newGameButton.MouseEntered += () => _uisfxStreamPlayer.Play();
 		_loadGameButton.MouseEntered += () => _uisfxStreamPlayer.Play();
 		_saveGameButton.MouseEntered += () => _uisfxStreamPlayer.Play();
 		_settingsButton.MouseEntered += () => _uisfxStreamPlayer.Play();
 		_quitGameButton.MouseEntered += () => _uisfxStreamPlayer.Play();
-		_newGameButton.Pressed += () => SceneTransitionManager.Instance.TransitionToScene("MainLevel");
+		_newGameButton.Pressed += NewGame;
 		_quitGameButton.Pressed += () => GetTree().Quit();
 	}
 
@@ -50,6 +58,26 @@ public partial class MainMenu : Control {
 			_menuHubCenterContainer.Visible = true;
 			_settingsInitialize.Close();
 			_selectedMenu = 0;
+		}
+	}
+
+	private void NewGame() {
+		Hide();
+		GameManager.Instance.gamestate = true;
+		SceneTransitionManager.Instance.TransitionToScene("MainLevel");
+	}
+	
+	public override void _UnhandledInput(InputEvent @event){
+		if(Input.IsActionPressed("pause_game_ignore") && GameManager.Instance.gamepaused) {
+			if(Visible) {
+				GD.Print("pause game ignore");
+				Hide();
+				Input.MouseMode = Input.MouseModeEnum.Captured;
+				GameManager.Instance.gamepaused = false;
+				GetTree().Paused = false;
+				AcceptEvent();
+			}
+			
 		}
 	}
 }

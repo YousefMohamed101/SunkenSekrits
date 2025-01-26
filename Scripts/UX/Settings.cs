@@ -28,6 +28,7 @@ public partial class Settings : Control {
 	private HSlider _sfxVolumeSlider;
 	private HSlider _frameLimitSlider;
 	private HSlider _mouseSensitivitySlider;
+	private HSlider _FOVSlider;
 	private OptionButton _windowModeOptionButton;
 	private OptionButton _resolutionOptionButton;
 	private OptionButton _vsyncModeOptionButton;
@@ -38,7 +39,9 @@ public partial class Settings : Control {
 	private Label _sfxVolumeLabel;
 	private Label _frameLimitLabel;
 	private Label _mouseSensitivityLabel;
+	private Label _FOVLabel;
 	private Label[] _audioLabels;
+	
 
 	public override void _Ready() {
 		
@@ -65,11 +68,16 @@ public partial class Settings : Control {
 		_mouseSensitivitySlider = GetNode<HSlider>("%MouseSesitivitySlider");
 		_invertBtn = GetNode<CheckButton>("%InvertButtonCheck");
 		_languageSelectorOptionButton = GetNode<OptionButton>("%LanguageSelector");
+		_FOVSlider = GetNode<HSlider>("%FOVSlider");
+		_FOVLabel = GetNode<Label>("CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer/FOVField/FOVLabel");
 
 		//Game tab signal connect
 		_mouseSensitivitySlider.ValueChanged += SetMouseSensitivitySlider;
 		_invertBtn.Toggled += SetInvertMouse;
 		_languageSelectorOptionButton.ItemSelected += SetLanguage;
+		_FOVSlider.ValueChanged += SetFOV;
+		
+		
 
 		//Graphic tab Get Nodes
 		_vsyncModeOptionButton = GetNode<OptionButton>("%VSyncSelector");
@@ -104,6 +112,8 @@ public partial class Settings : Control {
 		//Load and initialize Settings
 		LoadUserSettings();
 		SetSettingRuntime(_userSettingData);
+		GameManager.Instance.EmitSignal("FOVChanged", (float)_FOVSlider.Value);
+		GameManager.Instance.EmitSignal("MouseSenseChanged", (float)_mouseSensitivitySlider.Value);
 	}
 
 
@@ -141,8 +151,8 @@ public partial class Settings : Control {
 	}
 
 	// Settings Menu states
-	public void Open() { this.Visible = true; }
-	public void Close() { this.Visible = false; }
+	public void Open() { Visible = true; }
+	public void Close() { Visible = false; }
 
 
 	// System communication functions
@@ -160,6 +170,7 @@ public partial class Settings : Control {
 		SetMouseSensitivitySlider(setting.MouseSensitivity);
 		SetInvertMouse(setting.InvertedMode);
 		SetLanguage(setting.Language);
+		SetFOV(setting.Fov);
 		SetKeybind("Forward (Movement)", setting.ForwardButton);
 		SetKeybind("Backward (Movement)", setting.BackwardButton);
 		SetKeybind("Right (Movement)", setting.RightButton);
@@ -278,13 +289,25 @@ public partial class Settings : Control {
 
 	private void SetResolution(long value) {}
 
+	
+	
 	// Game tab Functions
 	private void SetMouseSensitivitySlider(double value) {
 		_mouseSensitivitySlider.Value = (float)value;
+		GameManager.Instance.EmitSignal("MouseSenseChanged", (float)value);
 		_mouseSensitivityLabel.Text = (Mathf.Floor(value * 100)/100).ToString();
 		_userSettingData.MouseSensitivity = (float)value;
 		SaveAndLoadManager.Instance.SaveUserSetting(_userSettingData);
 	}
+	
+	private void SetFOV(double value) {
+		_FOVSlider.Value = (float)value;
+		GameManager.Instance.EmitSignal("FOVChanged", (float)value);
+		_FOVLabel.Text = (Mathf.Floor(value * 100)/100).ToString();
+		_userSettingData.Fov = (float)value;
+		SaveAndLoadManager.Instance.SaveUserSetting(_userSettingData);
+	}
+
 
 	private void SetInvertMouse(bool value) {
 		if(value) {
@@ -330,18 +353,28 @@ public partial class Settings : Control {
 			
 			_keybindFieldCasted = _keybindfield.Instantiate<KeyBind>();
 			Button keybindButton;
-			if(action.EndsWith(" (Movement)")) {
+			if(action.Contains(" (Movement)")) {
 				_movementBinds.AddChild(_keybindFieldCasted);
 				keybindButton = _keybindFieldCasted.KeyBindButton;
 				_keybindFieldCasted.KeyBindLabel.Text = action.TrimSuffix(" (Movement)");
-				_keybindFieldCasted.KeyBindButton.Text = InputMap.ActionGetEvents(action)[0].AsText().TrimSuffix(" (Physical)");
+				if(InputMap.ActionGetEvents(action).Count > 0) {
+					_keybindFieldCasted.KeyBindButton.Text = InputMap.ActionGetEvents(action)[0].AsText().TrimSuffix(" (Physical)");
+				} else {
+					_keybindFieldCasted.KeyBindButton.Text = "Empty";
+				}
+
 				keybindButton.Pressed += ()=>SetKeybindButton(keybindButton, action);
 				
-			} else if(action.EndsWith(" (Action)")) {
+			} else if(action.Contains(" (Action)")) {
 				_actionBinds.AddChild(_keybindFieldCasted);
 				keybindButton = _keybindFieldCasted.KeyBindButton;
 				_keybindFieldCasted.KeyBindLabel.Text = action.TrimSuffix(" (Action)");
-				_keybindFieldCasted.KeyBindButton.Text = InputMap.ActionGetEvents(action)[0].AsText().TrimSuffix(" (Physical)");
+				if(InputMap.ActionGetEvents(action).Count > 0) {
+					_keybindFieldCasted.KeyBindButton.Text = InputMap.ActionGetEvents(action)[0].AsText().TrimSuffix(" (Physical)");
+				} else {
+					_keybindFieldCasted.KeyBindButton.Text = "Empty";
+				}
+
 				keybindButton.Pressed += ()=>SetKeybindButton(keybindButton, action);
 				if(_keybindFieldCasted.KeyBindButton.Text.Contains(" Mouse")) {
 					_keybindFieldCasted.KeyBindButton.Text = _keybindFieldCasted.KeyBindButton.Text.TrimSuffix(" Button");

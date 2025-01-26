@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://cgti2rrh83knd" path="res://Assets/Audio/SoundFX/ButtonHover.ogg" id="3_ldl0q"]
 
 [node name="MainMenu" type="Control"]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -59,8 +60,7 @@ text = "Load Game"
 
 [node name="SaveGame" type="Button" parent="MenuHub/VBoxContainer/Label2"]
 unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(300, 50)
+custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
