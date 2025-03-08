@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://ceuii5uyoayj0"]
+[gd_scene load_steps=11 format=3 uid="uid://ceuii5uyoayj0"]
 
 [ext_resource type="PackedScene" uid="uid://cq6uahja8g6xc" path="res://Assets/Scenes/Entities/Player.tscn" id="1_leg7y"]
+[ext_resource type="Script" uid="uid://i63ve70a4cox" path="res://Assets/Scenes/WaterTest.cs" id="2_0q8rr"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_leg7y"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -26,6 +27,8 @@ material = SubResource("StandardMaterial3D_7k80c")
 points = PackedVector3Array(-1, 0, -1, -1, 0, 1, 1, 0, -1, 1, 0, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_leg7y"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_leg7y"]
 
 [node name="PlaceHolder" type="Node3D"]
 
@@ -62,8 +65,24 @@ shape = SubResource("ConvexPolygonShape3D_7k80c")
 
 [node name="Player" parent="." instance=ExtResource("1_leg7y")]
 _movementSpeed = 3.0
-_jumpHeight = 8.95
-_jumpTP = 0.8
-_jumpTD = 0.65
+_jumpHeight = 5.0
+_jumpTP = 0.3
+_jumpTD = 0.3
+_bobbingSpeed = 15.0
+_bobbingAmplitude = 0.03
+_swayAmplitude = 0.1
+
+[node name="Water" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 3
+monitorable = false
+gravity_space_override = 3
+gravity = 0.1
+linear_damp = 1.0
+script = ExtResource("2_0q8rr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Water"]
+transform = Transform3D(500, 0, 0, 0, 500, 0, 0, 0, 500, 0, -260, 0)
+shape = SubResource("BoxShape3D_leg7y")
 
 [editable path="Player"]

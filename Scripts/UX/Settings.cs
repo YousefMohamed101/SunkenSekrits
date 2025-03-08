@@ -171,16 +171,16 @@ public partial class Settings : Control {
 		SetInvertMouse(setting.InvertedMode);
 		SetLanguage(setting.Language);
 		SetFOV(setting.Fov);
-		SetKeybind("Forward (Movement)", setting.ForwardButton);
-		SetKeybind("Backward (Movement)", setting.BackwardButton);
-		SetKeybind("Right (Movement)", setting.RightButton);
-		SetKeybind("Left (Movement)", setting.LeftButton);
-		SetKeybind("Jump (Movement)", setting.JumpButton);
-		SetKeybind("Run (Movement)",setting.RunButton);
-		SetKeybind("Crouch (Movement)", setting.CrouchButton);
-		SetKeybind("Interact (Action)", setting.InteractButton);
-		SetKeybind("Use (Action)", setting.UseButton);
-		SetKeybind("Aim (Action)", setting.AimButton);
+		SetKeybind("Forward_Movement", setting.ForwardButton);
+		SetKeybind("Backward_Movement", setting.BackwardButton);
+		SetKeybind("Right_Movement", setting.RightButton);
+		SetKeybind("Left_Movement", setting.LeftButton);
+		SetKeybind("Jump_Movement", setting.JumpButton);
+		SetKeybind("Run_Movement",setting.RunButton);
+		SetKeybind("Crouch_Movement", setting.CrouchButton);
+		SetKeybind("Interact_Action", setting.InteractButton);
+		SetKeybind("Use_Action", setting.UseButton);
+		SetKeybind("Aim_Action", setting.AimButton);
 		
 	}
 
@@ -353,10 +353,10 @@ public partial class Settings : Control {
 			
 			_keybindFieldCasted = _keybindfield.Instantiate<KeyBind>();
 			Button keybindButton;
-			if(action.Contains(" (Movement)")) {
+			if(action.Contains("Movement")) {
 				_movementBinds.AddChild(_keybindFieldCasted);
 				keybindButton = _keybindFieldCasted.KeyBindButton;
-				_keybindFieldCasted.KeyBindLabel.Text = action.TrimSuffix(" (Movement)");
+				_keybindFieldCasted.KeyBindLabel.Text = action.TrimSuffix("_Movement");
 				if(InputMap.ActionGetEvents(action).Count > 0) {
 					_keybindFieldCasted.KeyBindButton.Text = InputMap.ActionGetEvents(action)[0].AsText().TrimSuffix(" (Physical)");
 				} else {
@@ -365,10 +365,10 @@ public partial class Settings : Control {
 
 				keybindButton.Pressed += ()=>SetKeybindButton(keybindButton, action);
 				
-			} else if(action.Contains(" (Action)")) {
+			} else if(action.Contains("Action")) {
 				_actionBinds.AddChild(_keybindFieldCasted);
 				keybindButton = _keybindFieldCasted.KeyBindButton;
-				_keybindFieldCasted.KeyBindLabel.Text = action.TrimSuffix(" (Action)");
+				_keybindFieldCasted.KeyBindLabel.Text = action.TrimSuffix("_Action");
 				if(InputMap.ActionGetEvents(action).Count > 0) {
 					_keybindFieldCasted.KeyBindButton.Text = InputMap.ActionGetEvents(action)[0].AsText().TrimSuffix(" (Physical)");
 				} else {
@@ -421,34 +421,34 @@ public partial class Settings : Control {
 		
 			// Save the updated settings
 			switch(action) {
-				case "Forward (Movement)":
+				case "Forward_Movement":
 					_userSettingData.ForwardButton = @event;
 					break;
-				case "Backward (Movement)":
+				case "Backward_Movement":
 					_userSettingData.BackwardButton = @event;
 					break;
-				case "Right (Movement)":
+				case "Right_Movement":
 					_userSettingData.RightButton = @event;
 					break;
-				case "Left (Movement)":
+				case "Left_Movement":
 					_userSettingData.LeftButton = @event;
 					break;
-				case "Jump (Movement)":
+				case "Jump_Movement":
 					_userSettingData.JumpButton = @event;
 					break;
-				case "Run (Movement)":
+				case "Run_Movement":
 					_userSettingData.RunButton = @event;
 					break;
-				case "Crouch (Movement)":
+				case "Crouch_Movement":
 					_userSettingData.CrouchButton = @event;
 					break;
-				case "Interact (Action)":
+				case "Interact_Action":
 					_userSettingData.InteractButton = @event;
 					break;
-				case "Use (Action)":
+				case "Use_Action":
 					_userSettingData.UseButton = @event;
 					break;
-				case "Aim (Action)":
+				case "Aim_Action":
 					_userSettingData.AimButton = @event;
 					break;
 			}
@@ -487,7 +487,7 @@ public partial class Settings : Control {
 	
 	private bool IsKeyAvailable(InputEvent @event) {
 		foreach(string actionNa in _actionList) {
-			if(actionNa.EndsWith("(Movement)") || actionNa.EndsWith("(Action)")) {
+			if(actionNa.Contains("Movement") || actionNa.Contains("Action")) {
 				if(InputMap.ActionGetEvents(actionNa).Count > 0) {
 					var events = InputMap.ActionGetEvents(actionNa)[0];
 					_actionNa = actionNa;

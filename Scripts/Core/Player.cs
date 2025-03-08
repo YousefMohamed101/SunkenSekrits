@@ -21,11 +21,22 @@ public partial class Player : CharacterBody3D
 	private float _jumpGravity;
 	private float _jumpFAll;
 	private float _mouseSensitivity =1.0f;
+	public bool IsSwimming;
+	[Export] private float _bobbingSpeed = 2.0f;
+	[Export] private float _bobbingAmplitude = 0.25f;
+	private float _defaultBSAmplitude;
+	private float _timer;
+	[Export] private float _swaySpeed = 2.0f;
+	[Export] private float _swayAmplitude = 2.0f;
+	private float _runningSpeed;
+	
+	
+	
+	public override void _Ready() {
 
-	
-	
-	public override void _Ready()
-	{
+		_timer = 0.0f;
+		_defaultBSAmplitude = 0.0f;
+		_runningSpeed = _movementSpeed*_speedMultiplier;
 		_jumpForce = (2 * _jumpHeight)/_jumpTP;
 		_jumpGravity = (-2 * _jumpHeight)/(_jumpTP*_jumpTP);
 		_jumpFAll = (-2 * _jumpHeight)/(_jumpTD*_jumpTD);
@@ -39,7 +50,7 @@ public partial class Player : CharacterBody3D
 		GameManager.Instance.FOVChanged += _playerCamera.SetFov;
 		_mouseSensitivity = SaveAndLoadManager.Instance.GetUserSetting().MouseSensitivity;
 		_playerCamera.SetFov(SaveAndLoadManager.Instance.GetUserSetting().Fov);
-
+		IsSwimming = false;
 
 	}
 
@@ -49,36 +60,69 @@ public partial class Player : CharacterBody3D
 
 	public override void _Process(double delta)
 	{
-		
+		_timer += (float)delta;
+		if(_movementDirectionTranslation != Vector3.Zero) {
+			_playerCamera.VOffset = _defaultBSAmplitude + Mathf.Sin(_timer * _bobbingSpeed)*_bobbingAmplitude;
+			_playerCamera.HOffset = _defaultBSAmplitude + Mathf.Sin(_timer*_swaySpeed)*_swayAmplitude;
+		} else {
+			_playerCamera.VOffset= Mathf.Lerp(_playerCamera.VOffset, _defaultBSAmplitude, 0.1f);
+			_playerCamera.HOffset= Mathf.Lerp(_playerCamera.HOffset, _defaultBSAmplitude, 0.3f);
+			_timer = 0.0f;
+		}
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
 		_calcVelocity = Velocity;
-		if (!IsOnFloor())
+		if (!IsOnFloor() && !IsSwimming)
 		{
 			_calcVelocity.Y += _jumpFAll* (float)delta;
 		}
 
-		if (IsOnFloor()&& Input.IsActionPressed("Jump (Movement)"))
+		if (IsOnFloor()&& Input.IsActionPressed("Jump_Movement") && !IsSwimming)
 		{
 			_calcVelocity.Y = _jumpForce;
+			
 		}
-		_movementDirection = Input.GetVector("Left (Movement)", "Right (Movement)","Backward (Movement)", "Forward (Movement)");
+
+		if(IsSwimming) {
+			if(Input.IsActionPressed("Jump_Movement")) {
+				_calcVelocity.Y = _movementSpeed;
+				if(Input.IsActionPressed("Run_Movement")) {
+					_calcVelocity.Y *= _speedMultiplier;
+				}
+
+			} else if(Input.IsActionPressed("Crouch_Movement")) {
+				_calcVelocity.Y = _movementSpeed * -1.0f;
+				if(Input.IsActionPressed("Run_Movement")) {
+					_calcVelocity.Y *= _speedMultiplier;
+				}
+			} else {
+				_calcVelocity.Y  = GetGravity().Y;
+			}
+		}
+
+
+		_movementDirection = Input.GetVector("Left_Movement", "Right_Movement","Backward_Movement", "Forward_Movement");
 		//MovementDirectionTranslation = (Transform.Basis * new Vector3(MovementDirection.X, 0, -MovementDirection.Y)).Normalized();
-		
 		_movementDirectionTranslation = _movementDirection.X * _yawNode.Basis.X - _movementDirection.Y * _yawNode.Basis.Z;
+		_movementDirectionTranslation.Y = 0;
 		
 		
 		if (_movementDirectionTranslation != Vector3.Zero)
 		{
-
+			
+			
 			_calcVelocity.X = _movementDirectionTranslation.X * _movementSpeed;
 			_calcVelocity.Z = _movementDirectionTranslation.Z * _movementSpeed;
-			if (Input.IsActionPressed("Run (Movement)"))
+			
+			if (Input.IsActionPressed("Run_Movement"))
 			{
-				_calcVelocity.X = _movementDirectionTranslation.X * _movementSpeed * _speedMultiplier;
-				_calcVelocity.Z = _movementDirectionTranslation.Z * _movementSpeed * _speedMultiplier;
+				_playerCamera.VOffset = _defaultBSAmplitude + Mathf.Sin(_timer * (_bobbingSpeed+1.0f))*_bobbingAmplitude;
+				_playerCamera.HOffset = _defaultBSAmplitude + Mathf.Sin(_timer*(_swaySpeed+1.0f))*_swayAmplitude;
+				_calcVelocity.X = _movementDirectionTranslation.X * _runningSpeed;
+				_calcVelocity.Z = _movementDirectionTranslation.Z * _runningSpeed;
+				
 			}
 
 		}
@@ -86,6 +130,7 @@ public partial class Player : CharacterBody3D
 		{
 			_calcVelocity.X = 0.0f;
 			_calcVelocity.Z = 0.0f;
+			
 		}
 		
 		Velocity = _calcVelocity;
@@ -104,7 +149,7 @@ public partial class Player : CharacterBody3D
 			
 			_yawNode.RotateY(-_mousePosC.X);
 			//float clampedPitch = Mathf.Clamp(_pitchNode.Rotation.X - _mousePosC.Y, -Mathf.Pi / 2, Mathf.Pi / 2); 
-			float clampedPitch = Mathf.Clamp(_pitchNode.Rotation.X - _mousePosC.Y, -0.8f, 0.8f); 
+			float clampedPitch = Mathf.Clamp(_pitchNode.Rotation.X - _mousePosC.Y, -1.0f, 1.0f); 
 			_pitchNode.Rotation = new Vector3(clampedPitch, _pitchNode.Rotation.Y, _pitchNode.Rotation.Z); 
 			
 			
@@ -122,7 +167,7 @@ public partial class Player : CharacterBody3D
 	public override void _UnhandledInput(InputEvent @event){
 		if(Input.IsActionPressed("pause_game_ignore") && GameManager.Instance.gamepaused == false) {
 			if(!_playerMainMenu.Visible) {
-				Input.MouseMode = Input.MouseModeEnum.Visible;
+				DisplayServer.MouseSetMode(DisplayServer.MouseMode.Visible);
 				_playerMainMenu.Show();
 				GameManager.Instance.gamepaused = true;
 				GetTree().Paused = true;

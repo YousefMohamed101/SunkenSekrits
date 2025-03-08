@@ -1,8 +1,8 @@
-[gd_scene load_steps=17 format=3 uid="uid://b70jca6a8h6v1"]
+[gd_scene load_steps=15 format=3 uid="uid://b70jca6a8h6v1"]
 
-[ext_resource type="Shader" uid="uid://dlq2pi8upt4vq" path="res://Scripts/Shaders/Water.gdshader" id="1_gxg3r"]
 [ext_resource type="PackedScene" uid="uid://deffmc6217nn4" path="res://Assets/Scenes/MainMenu.tscn" id="1_tj6n7"]
 [ext_resource type="AudioStream" uid="uid://dtmk1vnpafnd1" path="res://Assets/Audio/Ambience/StartMenuAmbience.wav" id="2_66ct0"]
+[ext_resource type="PackedScene" uid="uid://bv5yw3d2p5m74" path="res://Assets/Scenes/water/water.tscn" id="3_gxg3r"]
 [ext_resource type="PackedScene" uid="uid://depsncw4npkkj" path="res://Assets/3DModels/Terrain/Island/island_Scene.tscn" id="4_1v1em"]
 [ext_resource type="AudioStream" uid="uid://ccmo7ciyc3xeg" path="res://Assets/Audio/Background/oceanic-depths.mp3" id="5_2psqu"]
 [ext_resource type="PackedScene" uid="uid://c1ws2thvf1qrq" path="res://Assets/3DModels/Terrain/Menu_Beach/Menu_Beach_Scene.tscn" id="5_gxg3r"]
@@ -18,6 +18,16 @@ sky_material = SubResource("ProceduralSkyMaterial_66ct0")
 background_mode = 2
 sky = SubResource("Sky_46hbq")
 tonemap_mode = 2
+ssao_enabled = true
+ssao_radius = 9.15
+ssao_intensity = 1.05
+ssao_detail = 5.0
+sdfgi_enabled = true
+sdfgi_use_occlusion = true
+sdfgi_bounce_feedback = 1.99
+sdfgi_cascades = 8
+sdfgi_min_cell_size = 0.0125
+sdfgi_y_scale = 2
 glow_enabled = true
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_66ct0"]
@@ -33,21 +43,14 @@ metallic = 0.2
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gxg3r"]
 albedo_color = Color(1, 0, 0, 1)
 
-[sub_resource type="QuadMesh" id="QuadMesh_66ct0"]
-subdivide_width = 1000
-subdivide_depth = 1000
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_21xj4"]
-render_priority = 0
-shader = ExtResource("1_gxg3r")
-
 [node name="StartMenu" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_1v1em")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.625223, -0.661155, 0.414693, 0.726575, -0.687087, -7.22542e-07, 0.284931, 0.301305, 0.909961, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 0.91706, 0.398749, 0, -0.398749, 0.91706, 0, 0, 0)
+light_specular = 1.33
 
 [node name="Terrain" type="Node3D" parent="."]
 
@@ -73,21 +76,17 @@ mesh = SubResource("TorusMesh_46hbq")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_gxg3r")
 
-[node name="Water" type="MeshInstance3D" parent="Terrain"]
-transform = Transform3D(4018.28, 0, 0, 0, -0.000125064, 9.467, 0, -2861.13, -4.13816e-07, 0, 0, -36.992)
-mesh = SubResource("QuadMesh_66ct0")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("ShaderMaterial_21xj4")
-metadata/_edit_group_ = true
-
 [node name="Island" parent="Terrain" instance=ExtResource("4_1v1em")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -844.364, -2.04919, -797.41)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -844.364, -5, -797.41)
 
 [node name="Menu_Beach" parent="Terrain" instance=ExtResource("5_gxg3r")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
+[node name="Water" parent="Terrain" instance=ExtResource("3_gxg3r")]
+transform = Transform3D(1.8, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -990.498)
+
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.999808, 0.0195988, 0, -0.0195988, 0.999808, -0.0855084, 0.853506, 0.949121)
+transform = Transform3D(1, 0, 0, 0, 0.999808, 0.0195988, 0, -0.0195988, 0.999808, -0.086, 0.8, 0.949)
 fov = 90.9
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
@@ -106,3 +105,6 @@ volume_db = -15.0
 autoplay = true
 bus = &"BGM"
 parameters/looping = true
+
+[editable path="Terrain/Island"]
+[editable path="Terrain/Water"]
