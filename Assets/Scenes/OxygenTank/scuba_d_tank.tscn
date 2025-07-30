@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://bliwlr5vi461m"]
+
+[ext_resource type="PackedScene" uid="uid://bq6dljqrcddsv" path="res://Assets/Scenes/OxygenTank/ScubaDTank.glb" id="1_uax4g"]
+
+[node name="ScubaDTank" instance=ExtResource("1_uax4g")]

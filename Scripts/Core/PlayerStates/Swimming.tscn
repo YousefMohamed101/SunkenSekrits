@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bie1td4as0vso"]
+
+[ext_resource type="Script" uid="uid://ebqyb2pe8pqx" path="res://Scripts/Core/PlayerStates/Swimming.cs" id="1_137pl"]
+
+[node name="Swimming" type="Node"]
+script = ExtResource("1_137pl")

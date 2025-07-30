@@ -1,0 +1,85 @@
+[gd_scene load_steps=13 format=3 uid="uid://cq6uahja8g6xc"]
+
+[ext_resource type="Script" uid="uid://db1lg7ntmiudl" path="res://Scripts/Core/Player.cs" id="1_d605g"]
+[ext_resource type="PackedScene" uid="uid://deffmc6217nn4" path="res://Assets/Scenes/MainMenu.tscn" id="2_4vjjk"]
+[ext_resource type="Script" uid="uid://dbp8wdbiexfge" path="res://Scripts/Managers/StateMachineManager.cs" id="3_a0add"]
+[ext_resource type="Script" uid="uid://bi3b2j85bh52r" path="res://Assets/Scenes/Characters/PlayerCameraYaw.cs" id="3_bw45n"]
+[ext_resource type="Texture2D" uid="uid://dqdkbhfqbs7xc" path="res://Assets/Scenes/UI_Elements/Dot1R.svg" id="3_k7njx"]
+[ext_resource type="PackedScene" uid="uid://iurf6v2u54fl" path="res://Scripts/Core/PlayerStates/Movement.tscn" id="4_rsp1g"]
+[ext_resource type="PackedScene" uid="uid://bie1td4as0vso" path="res://Scripts/Core/PlayerStates/Swimming.tscn" id="5_jctw0"]
+[ext_resource type="PackedScene" uid="uid://ddd1gpym7avuj" path="res://Scripts/Core/PlayerStates/Crouch.tscn" id="6_j06kc"]
+[ext_resource type="Shader" uid="uid://jmtn5drnw3lw" path="res://Assets/Scenes/Characters/NarcosisBlur.gdshader" id="9_jctw0"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_yuaxj"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yuaxj"]
+radius = 0.52
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jctw0"]
+shader = ExtResource("9_jctw0")
+shader_parameter/blur_strength = 0.0
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("Manager", "PlayerCamera", "_yawNode", "_pitchNode", "_hudLayer")]
+collision_layer = 2
+script = ExtResource("1_d605g")
+Manager = NodePath("StateMachineManager")
+JumpForce = 12.0
+PlayerCamera = NodePath("Yaw/Pitch/PlayerView")
+_yawNode = NodePath("Yaw")
+_pitchNode = NodePath("Yaw/Pitch")
+_mainMenu = ExtResource("2_4vjjk")
+_hudLayer = NodePath("HUD")
+
+[node name="StateMachineManager" type="Node" parent="."]
+script = ExtResource("3_a0add")
+InitialState = NodePath("Movement")
+
+[node name="Movement" parent="StateMachineManager" instance=ExtResource("4_rsp1g")]
+
+[node name="Crouch" parent="StateMachineManager" instance=ExtResource("6_j06kc")]
+
+[node name="Swimming" parent="StateMachineManager" instance=ExtResource("5_jctw0")]
+
+[node name="Yaw" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.773, 0)
+script = ExtResource("3_bw45n")
+
+[node name="Pitch" type="Node3D" parent="Yaw"]
+
+[node name="PlayerView" type="Camera3D" parent="Yaw/Pitch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.022381)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_yuaxj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_yuaxj")
+
+[node name="MovementDirection" type="Marker3D" parent="."]
+
+[node name="HUD" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+
+[node name="CenterContainer" type="CenterContainer" parent="HUD"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="HUD/CenterContainer"]
+layout_mode = 2
+texture = ExtResource("3_k7njx")
+
+[node name="ColorRect" type="ColorRect" parent="HUD"]
+material = SubResource("ShaderMaterial_jctw0")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CameraSmoothing" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.773, 0)

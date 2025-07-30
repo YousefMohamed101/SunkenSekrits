@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://205n1nfsmskl"]
+
+[ext_resource type="PackedScene" uid="uid://b02egbkby5ts8" path="res://Assets/Scenes/Oxygen_Gauge/Oxygen_Gauge.glb" id="1_y1xdi"]
+
+[node name="Oxygen_Gauge" instance=ExtResource("1_y1xdi")]

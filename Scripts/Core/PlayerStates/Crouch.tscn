@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ddd1gpym7avuj"]
+
+[ext_resource type="Script" uid="uid://30inm2fuoydq" path="res://Scripts/Core/PlayerStates/CrouchState.cs" id="1_d4aup"]
+
+[node name="Crouch" type="Node"]
+script = ExtResource("1_d4aup")
