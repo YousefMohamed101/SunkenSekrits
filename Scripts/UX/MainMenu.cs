@@ -2,16 +2,16 @@ using Godot;
 using Godot.Collections;
 
 public partial class MainMenu : Control {
-	private Button _newGameButton;
 	private Button _loadGameButton;
-	private Button _saveGameButton;
-	private Button _settingsButton;
-	private Button _quitGameButton;
-	private Settings _settingsInitialize;
-	private CenterContainer _menuHubCenterContainer;
-	private AudioStreamPlayer _uisfxStreamPlayer;
-	private int _selectedMenu;
 	private Array<Node> _menuCheck;
+	private CenterContainer _menuHubCenterContainer;
+	private Button _newGameButton;
+	private Button _quitGameButton;
+	private Button _saveGameButton;
+	private int _selectedMenu;
+	private Button _settingsButton;
+	private Settings _settingsInitialize;
+	private AudioStreamPlayer _uisfxStreamPlayer;
 
 	public override void _Ready() {
 		_newGameButton = GetNode<Button>("%NewGame");
@@ -21,8 +21,8 @@ public partial class MainMenu : Control {
 		_quitGameButton = GetNode<Button>("%QuitGame");
 		_menuHubCenterContainer = GetNode<CenterContainer>("%MenuHub");
 		_uisfxStreamPlayer = GetNode<AudioStreamPlayer>("%UISFX");
-		
-		_menuCheck = this.GetChildren();
+
+		_menuCheck = GetChildren();
 		foreach(var component in _menuCheck) {
 			if(component is Settings) {
 				_settingsInitialize = GetNode<Settings>("%Settings");
@@ -32,14 +32,14 @@ public partial class MainMenu : Control {
 			}
 		}
 
-		if(GameManager.Instance.gamestate == true) {
+		if(GameManager.Instance.gamestate) {
 			_saveGameButton.Show();
 			_loadGameButton.Hide();
 			_newGameButton.Hide();
-			
 		} else {
 			_saveGameButton.Hide();
 		}
+
 		_newGameButton.MouseEntered += () => _uisfxStreamPlayer.Play();
 		_loadGameButton.MouseEntered += () => _uisfxStreamPlayer.Play();
 		_saveGameButton.MouseEntered += () => _uisfxStreamPlayer.Play();
@@ -47,6 +47,7 @@ public partial class MainMenu : Control {
 		_quitGameButton.MouseEntered += () => _uisfxStreamPlayer.Play();
 		_newGameButton.Pressed += NewGame;
 		_quitGameButton.Pressed += () => GetTree().Quit();
+		GameManager.Instance.GameOutofFocus += () => Show();
 	}
 
 	private void GetSettingsInitializeButtonHandling() {
@@ -66,18 +67,16 @@ public partial class MainMenu : Control {
 		GameManager.Instance.gamestate = true;
 		SceneTransitionManager.Instance.TransitionToScene("MainLevel");
 	}
-	
-	public override void _UnhandledInput(InputEvent @event){
+
+	public override void _UnhandledInput(InputEvent @event) {
 		if(Input.IsActionPressed("pause_game_ignore") && GameManager.Instance.gamepaused) {
 			if(Visible) {
-				GD.Print("pause game ignore");
 				Hide();
 				Input.MouseMode = Input.MouseModeEnum.Captured;
 				GameManager.Instance.gamepaused = false;
 				GetTree().Paused = false;
 				AcceptEvent();
 			}
-			
 		}
 	}
 }

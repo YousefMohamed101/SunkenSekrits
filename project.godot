@@ -22,7 +22,7 @@ resources_spreadsheet_view/fold_docks=false
 [application]
 
 config/name="Sunken Secrets"
-run/main_scene="res://Assets/Scenes/SplashScreen.tscn"
+run/main_scene="uid://bliwlr5vi461m"
 config/features=PackedStringArray("4.4", "C#", "Forward Plus")
 boot_splash/bg_color=Color(0.0572, 0.0836, 0.11, 0)
 boot_splash/show_image=false
@@ -45,8 +45,8 @@ settings/use_custom_user_dir=false
 window/size/viewport_width=1980
 window/size/viewport_height=1080
 window/size/mode=3
-window/stretch/mode="canvas_items"
-window/stretch/aspect="ignore"
+window/stretch/mode="viewport"
+window/stretch/aspect="expand"
 window/vsync/vsync_mode=0
 
 [dotnet]
@@ -135,5 +135,14 @@ pause_game_ignore={
 
 [physics]
 
+common/physics_jitter_fix=0.0
 3d/physics_engine="Jolt Physics"
 common/physics_interpolation=true
+
+[rendering]
+
+camera/depth_of_field/depth_of_field_bokeh_shape=2
+anti_aliasing/quality/msaa_2d=3
+anti_aliasing/quality/msaa_3d=3
+anti_aliasing/screen_space_roughness_limiter/enabled=false
+anti_aliasing/quality/use_debanding=true

@@ -1,5 +1,6 @@
-[gd_scene load_steps=15 format=3 uid="uid://b70jca6a8h6v1"]
+[gd_scene load_steps=16 format=3 uid="uid://b70jca6a8h6v1"]
 
+[ext_resource type="Texture2D" uid="uid://cuk8f1u5ro2jt" path="res://Assets/Skyboxes/Panorama_Sky_06-512x512.png" id="1_21xj4"]
 [ext_resource type="PackedScene" uid="uid://deffmc6217nn4" path="res://Assets/Scenes/MainMenu.tscn" id="1_tj6n7"]
 [ext_resource type="AudioStream" uid="uid://dtmk1vnpafnd1" path="res://Assets/Audio/Ambience/StartMenuAmbience.wav" id="2_66ct0"]
 [ext_resource type="PackedScene" uid="uid://bv5yw3d2p5m74" path="res://Assets/Scenes/water/water.tscn" id="3_gxg3r"]
@@ -7,21 +8,22 @@
 [ext_resource type="AudioStream" uid="uid://ccmo7ciyc3xeg" path="res://Assets/Audio/Background/oceanic-depths.mp3" id="5_2psqu"]
 [ext_resource type="PackedScene" uid="uid://c1ws2thvf1qrq" path="res://Assets/3DModels/Terrain/Menu_Beach/Menu_Beach_Scene.tscn" id="5_gxg3r"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_66ct0"]
-sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
-ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_jlh2t"]
+panorama = ExtResource("1_21xj4")
 
 [sub_resource type="Sky" id="Sky_46hbq"]
-sky_material = SubResource("ProceduralSkyMaterial_66ct0")
+sky_material = SubResource("PanoramaSkyMaterial_jlh2t")
+radiance_size = 4
 
 [sub_resource type="Environment" id="Environment_1v1em"]
 background_mode = 2
 sky = SubResource("Sky_46hbq")
-tonemap_mode = 2
+tonemap_exposure = 1.88
 ssao_enabled = true
-ssao_radius = 9.15
-ssao_intensity = 1.05
+ssao_radius = 17.7
+ssao_power = 0.256133
 ssao_detail = 5.0
+ssao_sharpness = 1.0
 sdfgi_enabled = true
 sdfgi_use_occlusion = true
 sdfgi_bounce_feedback = 1.99
@@ -29,6 +31,13 @@ sdfgi_cascades = 8
 sdfgi_min_cell_size = 0.0125
 sdfgi_y_scale = 2
 glow_enabled = true
+glow_normalized = true
+glow_strength = 0.47
+fog_mode = 1
+fog_density = 0.0045
+adjustment_enabled = true
+adjustment_contrast = 1.1
+adjustment_saturation = 1.2
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_66ct0"]
 
@@ -50,7 +59,12 @@ environment = SubResource("Environment_1v1em")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.91706, 0.398749, 0, -0.398749, 0.91706, 0, 0, 0)
+light_energy = 1.32
+light_indirect_energy = 2.387
 light_specular = 1.33
+shadow_enabled = true
+shadow_normal_bias = 1.733
+shadow_blur = 0.3
 
 [node name="Terrain" type="Node3D" parent="."]
 

@@ -5,46 +5,46 @@ using Godot.Collections;
 public partial class Settings : Control {
 	[Signal]
 	public delegate void SettingReturnEventHandler();
-	
-	[Export] private PackedScene _keybindfield;
-	private InputEvent _previousEvent;
-	private StringName _actionNa;
-	private Array<StringName> _actionList;
-	private KeyBind  _keybindFieldCasted;
-	private bool _isremaping;
-	private string _actionToSet;
-	private VBoxContainer _movementBinds;
+
 	private VBoxContainer _actionBinds;
-	private SettingData _userSettingData;
+	private Array<StringName> _actionList;
+	private StringName _actionNa;
+	private string _actionToSet;
+	private Label[] _audioLabels;
 	private AudioStream _audioStream = GD.Load<AudioStream>("res://Assets/Audio/SoundFX/SliderandCheckin.wav");
-	private Button _buttonKeybindSet;
+	private Label _bgmVolumeLabel;
+	private HSlider _bgmVolumeSlider;
 	private Button _btnBack;
 	private Button _btnDefaultSetting;
-	private CheckButton _invertBtn;
-	private AudioStreamPlayer _uisfx;
-	private HSlider _masterVolumeSlider;
-	private HSlider _voiceVolumeSlider;
-	private HSlider _bgmVolumeSlider;
-	private HSlider _sfxVolumeSlider;
-	private HSlider _frameLimitSlider;
-	private HSlider _mouseSensitivitySlider;
+	private Button _buttonKeybindSet;
+	private Label _FOVLabel;
 	private HSlider _FOVSlider;
-	private OptionButton _windowModeOptionButton;
-	private OptionButton _resolutionOptionButton;
-	private OptionButton _vsyncModeOptionButton;
+	private Label _frameLimitLabel;
+	private HSlider _frameLimitSlider;
+	private CheckButton _invertBtn;
+	private bool _isremaping;
+
+	[Export] private PackedScene _keybindfield;
+	private KeyBind _keybindFieldCasted;
 	private OptionButton _languageSelectorOptionButton;
 	private Label _masterVolumeLabel;
-	private Label _voiceVolumeLabel;
-	private Label _bgmVolumeLabel;
-	private Label _sfxVolumeLabel;
-	private Label _frameLimitLabel;
+	private HSlider _masterVolumeSlider;
 	private Label _mouseSensitivityLabel;
-	private Label _FOVLabel;
-	private Label[] _audioLabels;
-	
+	private HSlider _mouseSensitivitySlider;
+	private VBoxContainer _movementBinds;
+	private InputEvent _previousEvent;
+	private OptionButton _resolutionOptionButton;
+	private Label _sfxVolumeLabel;
+	private HSlider _sfxVolumeSlider;
+	private AudioStreamPlayer _uisfx;
+	private SettingData _userSettingData;
+	private Label _voiceVolumeLabel;
+	private HSlider _voiceVolumeSlider;
+	private OptionButton _vsyncModeOptionButton;
+	private OptionButton _windowModeOptionButton;
+
 
 	public override void _Ready() {
-		
 		//Audio tab Get Nodes
 		_masterVolumeLabel = GetNode<Label>("CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/MasterVolumeField/HBoxContainer2/MasterCounter");
 		_voiceVolumeLabel = GetNode<Label>("CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/VoiceVolumeField/HBoxContainer2/VoiceCounter");
@@ -76,8 +76,7 @@ public partial class Settings : Control {
 		_invertBtn.Toggled += SetInvertMouse;
 		_languageSelectorOptionButton.ItemSelected += SetLanguage;
 		_FOVSlider.ValueChanged += SetFOV;
-		
-		
+
 
 		//Graphic tab Get Nodes
 		_vsyncModeOptionButton = GetNode<OptionButton>("%VSyncSelector");
@@ -90,16 +89,16 @@ public partial class Settings : Control {
 		_frameLimitSlider.ValueChanged += SetFrameLimitSlider;
 		_vsyncModeOptionButton.ItemSelected += SetVSync;
 		_windowModeOptionButton.ItemSelected += SetWindowModeOptionButton;
-		
-		
+
+
 		// Keybind Tab
 		_movementBinds = GetNode<VBoxContainer>("%MovementBinds");
 		_actionBinds = GetNode<VBoxContainer>("%ActionBinds");
 		_actionList = InputMap.GetActions();
-		
+
 		KeyBindTabInit();
-		
-		
+
+
 		//Setting General function Get Nodes
 		_uisfx = GetNode<AudioStreamPlayer>("%SettingUISFX");
 		_btnBack = GetNode<Button>("%SettingsBack");
@@ -112,32 +111,33 @@ public partial class Settings : Control {
 		//Load and initialize Settings
 		LoadUserSettings();
 		SetSettingRuntime(_userSettingData);
-		GameManager.Instance.EmitSignal("FOVChanged", (float)_FOVSlider.Value);
+		GameManager.Instance.EmitSignal("FovChanged", (float)_FOVSlider.Value);
 		GameManager.Instance.EmitSignal("MouseSenseChanged", (float)_mouseSensitivitySlider.Value);
 	}
 
 
 	public override void _Input(InputEvent @event) {
 		if(_isremaping) {
-			
 			if(@event is InputEventKey eventKey && @event.IsPressed()) {
 				if(!IsKeyAvailable(@event)) {
-					SetKeybind(_actionNa,null);
+					SetKeybind(_actionNa, null);
 				}
+
 				SetKeybind(_actionToSet, @event);
 				_buttonKeybindSet.Text = InputMap.ActionGetEvents(_actionToSet)[0].AsText().TrimSuffix(" (Physical)");
 				_isremaping = false;
 				_buttonKeybindSet = null;
 				_actionToSet = null;
 				AcceptEvent();
-			}else if(@event is InputEventMouseButton aevent && @event.IsPressed()) {
+			} else if(@event is InputEventMouseButton aevent && @event.IsPressed()) {
 				if(aevent.DoubleClick) {
 					aevent.DoubleClick = false;
 				}
+
 				if(!IsKeyAvailable(@event)) {
-					SetKeybind(_actionNa,null);
+					SetKeybind(_actionNa, null);
 				}
-			
+
 
 				SetKeybind(_actionToSet, @event);
 				_buttonKeybindSet.Text = InputMap.ActionGetEvents(_actionToSet)[0].AsText().TrimSuffix(" (Physical)");
@@ -176,12 +176,11 @@ public partial class Settings : Control {
 		SetKeybind("Right_Movement", setting.RightButton);
 		SetKeybind("Left_Movement", setting.LeftButton);
 		SetKeybind("Jump_Movement", setting.JumpButton);
-		SetKeybind("Run_Movement",setting.RunButton);
+		SetKeybind("Run_Movement", setting.RunButton);
 		SetKeybind("Crouch_Movement", setting.CrouchButton);
 		SetKeybind("Interact_Action", setting.InteractButton);
 		SetKeybind("Use_Action", setting.UseButton);
 		SetKeybind("Aim_Action", setting.AimButton);
-		
 	}
 
 	private void LoadUserSettings() { _userSettingData = SaveAndLoadManager.Instance.GetUserSetting(); }
@@ -289,21 +288,20 @@ public partial class Settings : Control {
 
 	private void SetResolution(long value) {}
 
-	
-	
+
 	// Game tab Functions
 	private void SetMouseSensitivitySlider(double value) {
 		_mouseSensitivitySlider.Value = (float)value;
 		GameManager.Instance.EmitSignal("MouseSenseChanged", (float)value);
-		_mouseSensitivityLabel.Text = (Mathf.Floor(value * 100)/100).ToString();
+		_mouseSensitivityLabel.Text = (Mathf.Floor(value * 100) / 100).ToString();
 		_userSettingData.MouseSensitivity = (float)value;
 		SaveAndLoadManager.Instance.SaveUserSetting(_userSettingData);
 	}
-	
+
 	private void SetFOV(double value) {
 		_FOVSlider.Value = (float)value;
-		GameManager.Instance.EmitSignal("FOVChanged", (float)value);
-		_FOVLabel.Text = (Mathf.Floor(value * 100)/100).ToString();
+		GameManager.Instance.EmitSignal("FovChanged", (float)value);
+		_FOVLabel.Text = (Mathf.Floor(value * 100) / 100).ToString();
 		_userSettingData.Fov = (float)value;
 		SaveAndLoadManager.Instance.SaveUserSetting(_userSettingData);
 	}
@@ -343,14 +341,11 @@ public partial class Settings : Control {
 				_userSettingData.Language = 3;
 				SaveAndLoadManager.Instance.SaveUserSetting(_userSettingData);
 				break;
-			
 		}
 	}
 
 	private void KeyBindTabInit() {
-		
 		foreach(string action in _actionList) {
-			
 			_keybindFieldCasted = _keybindfield.Instantiate<KeyBind>();
 			Button keybindButton;
 			if(action.Contains("Movement")) {
@@ -363,8 +358,7 @@ public partial class Settings : Control {
 					_keybindFieldCasted.KeyBindButton.Text = "Empty";
 				}
 
-				keybindButton.Pressed += ()=>SetKeybindButton(keybindButton, action);
-				
+				keybindButton.Pressed += () => SetKeybindButton(keybindButton, action);
 			} else if(action.Contains("Action")) {
 				_actionBinds.AddChild(_keybindFieldCasted);
 				keybindButton = _keybindFieldCasted.KeyBindButton;
@@ -375,12 +369,11 @@ public partial class Settings : Control {
 					_keybindFieldCasted.KeyBindButton.Text = "Empty";
 				}
 
-				keybindButton.Pressed += ()=>SetKeybindButton(keybindButton, action);
+				keybindButton.Pressed += () => SetKeybindButton(keybindButton, action);
 				if(_keybindFieldCasted.KeyBindButton.Text.Contains(" Mouse")) {
 					_keybindFieldCasted.KeyBindButton.Text = _keybindFieldCasted.KeyBindButton.Text.TrimSuffix(" Button");
 				}
 			}
-			
 		}
 	}
 
@@ -395,12 +388,10 @@ public partial class Settings : Control {
 
 			_buttonKeybindSet = btn;
 			btn.Text = "Assign a Key";
-			
-		} 
+		}
 	}
 
 	private void SetKeybind(StringName action, InputEvent @event) {
-		
 		if(InputMap.ActionGetEvents(action).Count() > 0) {
 			InputMap.ActionEraseEvents(action);
 		}
@@ -408,83 +399,83 @@ public partial class Settings : Control {
 		if(@event != null) {
 			InputMap.ActionAddEvent(action, @event);
 		}
-		
+
 		Button keybindass = FindKeybindButton(action);
 		if(keybindass != null && @event != null) {
 			keybindass.Text = InputMap.ActionGetEvents(action)[0].AsText().TrimSuffix(" (Physical)");
-			if (keybindass.Text.Contains(" Mouse")) {
+			if(keybindass.Text.Contains(" Mouse")) {
 				keybindass.Text = keybindass.Text.TrimSuffix(" Button");
 			}
 		} else {
 			keybindass.Text = "Empty";
 		}
-		
-			// Save the updated settings
-			switch(action) {
-				case "Forward_Movement":
-					_userSettingData.ForwardButton = @event;
-					break;
-				case "Backward_Movement":
-					_userSettingData.BackwardButton = @event;
-					break;
-				case "Right_Movement":
-					_userSettingData.RightButton = @event;
-					break;
-				case "Left_Movement":
-					_userSettingData.LeftButton = @event;
-					break;
-				case "Jump_Movement":
-					_userSettingData.JumpButton = @event;
-					break;
-				case "Run_Movement":
-					_userSettingData.RunButton = @event;
-					break;
-				case "Crouch_Movement":
-					_userSettingData.CrouchButton = @event;
-					break;
-				case "Interact_Action":
-					_userSettingData.InteractButton = @event;
-					break;
-				case "Use_Action":
-					_userSettingData.UseButton = @event;
-					break;
-				case "Aim_Action":
-					_userSettingData.AimButton = @event;
-					break;
-			}
-			SaveAndLoadManager.Instance.SaveUserSetting(_userSettingData);
+
+		// Save the updated settings
+		switch(action) {
+			case "Forward_Movement":
+				_userSettingData.ForwardButton = @event;
+				break;
+			case "Backward_Movement":
+				_userSettingData.BackwardButton = @event;
+				break;
+			case "Right_Movement":
+				_userSettingData.RightButton = @event;
+				break;
+			case "Left_Movement":
+				_userSettingData.LeftButton = @event;
+				break;
+			case "Jump_Movement":
+				_userSettingData.JumpButton = @event;
+				break;
+			case "Run_Movement":
+				_userSettingData.RunButton = @event;
+				break;
+			case "Crouch_Movement":
+				_userSettingData.CrouchButton = @event;
+				break;
+			case "Interact_Action":
+				_userSettingData.InteractButton = @event;
+				break;
+			case "Use_Action":
+				_userSettingData.UseButton = @event;
+				break;
+			case "Aim_Action":
+				_userSettingData.AimButton = @event;
+				break;
+		}
+
+		SaveAndLoadManager.Instance.SaveUserSetting(_userSettingData);
 	}
-	
+
 	private Button FindKeybindButton(StringName action) {
 		// Check movement binds container
-		foreach (var child in _movementBinds.GetChildren()) {
-			if (child is KeyBind keybind) {
+		foreach(var child in _movementBinds.GetChildren()) {
+			if(child is KeyBind keybind) {
 				string actionName = action.ToString();
 				string labelText = keybind.KeyBindLabel.Text;
-                
-				if (actionName.StartsWith(labelText)) {
+
+				if(actionName.StartsWith(labelText)) {
 					return keybind.KeyBindButton;
 				}
 			}
 		}
-        
+
 		// Check action binds container
-		foreach (var child in _actionBinds.GetChildren()) {
-			if (child is KeyBind keybind) {
+		foreach(var child in _actionBinds.GetChildren()) {
+			if(child is KeyBind keybind) {
 				string actionName = action.ToString();
 				string labelText = keybind.KeyBindLabel.Text;
-                
-				if (actionName.StartsWith(labelText)) {
+
+				if(actionName.StartsWith(labelText)) {
 					return keybind.KeyBindButton;
 				}
 			}
 		}
-        
+
 		return null;
 	}
 
 
-	
 	private bool IsKeyAvailable(InputEvent @event) {
 		foreach(string actionNa in _actionList) {
 			if(actionNa.Contains("Movement") || actionNa.Contains("Action")) {
@@ -493,19 +484,17 @@ public partial class Settings : Control {
 					_actionNa = actionNa;
 					if(@event is InputEventKey eventKey && events is InputEventKey existingEvent) {
 						if(eventKey.Keycode == existingEvent.Keycode) {
-
 							return false;
 						}
 					} else if(@event is InputEventMouseButton eventMouse && events is InputEventMouseButton existingEventMouse) {
 						if(eventMouse.ButtonIndex == existingEventMouse.ButtonIndex) {
-							
 							return false;
 						}
 					}
 				}
 			}
 		}
+
 		return true;
 	}
-	
 }

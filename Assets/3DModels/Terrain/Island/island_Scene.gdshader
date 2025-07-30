@@ -1,5 +1,7 @@
 // NOTE: Shader automatically converted from Godot Engine 4.4.beta1.mono's StandardMaterial3D.
 shader_type spatial;
+render_mode cull_disabled;
+
 
 uniform sampler2D mask:source_color;
 uniform sampler2D grass_tex:source_color;
