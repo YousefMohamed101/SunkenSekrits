@@ -27,7 +27,7 @@ config/features=PackedStringArray("4.4", "C#", "Forward Plus")
 boot_splash/bg_color=Color(0.0572, 0.0836, 0.11, 0)
 boot_splash/show_image=false
 boot_splash/fullsize=false
-config/icon="res://icon.svg"
+config/icon="res://Assets/icon.svg"
 
 [autoload]
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=15 format=3 uid="uid://ceuii5uyoayj0"]
 
 [ext_resource type="Script" uid="uid://cf123efmac170" path="res://Assets/Scenes/MainLevel.cs" id="1_bfd76"]
-[ext_resource type="PackedScene" uid="uid://cq6uahja8g6xc" path="res://Assets/Scenes/Characters/Player.tscn" id="1_leg7y"]
+[ext_resource type="PackedScene" uid="uid://cq6uahja8g6xc" path="res://Assets/Scenes/Player/Player.tscn" id="1_leg7y"]
 [ext_resource type="Texture2D" uid="uid://dc0ukfjmsskaj" path="res://Assets/Skyboxes/Panorama_Sky_05-512x512.png" id="1_xuups"]
 [ext_resource type="Script" uid="uid://i63ve70a4cox" path="res://Assets/Scenes/WaterTest.cs" id="2_0q8rr"]
 [ext_resource type="PackedScene" uid="uid://clvgjuakmxpbq" path="res://Debuging_Tools/EntityDebuger.tscn" id="3_ivefo"]
@@ -89,13 +89,19 @@ shape = SubResource("ConvexPolygonShape3D_7k80c")
 
 [node name="Player" parent="." instance=ExtResource("1_leg7y")]
 JumpForce = 20.0
-BobbingSpeed = 10.0
-BobbingAmplitude = 0.1
-SwaySpeed = 5.0
 SwayAmplitude = 0.05
+SwaySpeed = 5.0
+BobbingAmplitude = 0.1
+BobbingSpeed = 10.0
 
 [node name="PlayerView" parent="Player/Yaw/Pitch" index="0"]
 current = true
+
+[node name="NarcBuildup" parent="Player/HUD/NarcosisEffect" index="0"]
+wait_time = 10.0
+
+[node name="FootSteps" parent="Player" index="7"]
+bus = &"SFX"
 
 [node name="Water" type="Area3D" parent="."]
 collision_layer = 0

@@ -3,13 +3,18 @@ using System.Text.RegularExpressions;
 using Godot;
 
 public partial class Player : CharacterBody3D {
+	[Export] private AudioStreamPlayer3D _footstepPlayer;
 	[Export] private CanvasLayer _hudLayer;
 	[Export] private PackedScene _mainMenu;
+
+
 	private Vector2 _mousePosC;
 	private float _mouseSensitivity = 1.0f;
 	[Export] private Node3D _pitchNode;
 	private MainMenu _playerMainMenu;
+	private AudioStream[] _sounds;
 	[Export] private Node3D _yawNode;
+
 	[Export] public float BobbingAmplitude = 0.25f;
 	[Export] public float BobbingSpeed = 2.0f;
 	public Vector3 CalcVelocity;
@@ -17,14 +22,19 @@ public partial class Player : CharacterBody3D {
 	public float DefaultBsAmplitude;
 	[Export] public float FallSpeed = 5.0f;
 	[Export] public float JumpForce = 5.0f;
-
-
-	[Export] public StateMachineManager Manager;
 	public Vector2 MovementDirection;
 	public Vector3 MovementDirectionTranslation;
-	[Export] public float MovementSpeed = 100f;
+
+	[ExportGroup("Player Stats")] [Export] public float MovementSpeed = 100f;
+
+
+	[ExportGroup("Nodes")] [Export] public NarcosisEffect NarcosisEffect;
+
 	[Export] public Camera3D PlayerCamera;
 	[Export] public float SpeedMultiplier = 1.5f;
+
+	[ExportGroup("Managers")] [Export] public StateMachineManager StateManager;
+
 	[Export] public float SwayAmplitude = 2.0f;
 	[Export] public float SwaySpeed = 2.0f;
 	[Export] public float SwimmingSpeed = 5.0f;
@@ -45,6 +55,7 @@ public partial class Player : CharacterBody3D {
 		GameManager.Instance.FovChanged += PlayerCamera.SetFov;
 		_mouseSensitivity = SaveAndLoadManager.Instance.GetUserSetting().MouseSensitivity;
 		PlayerCamera.SetFov(SaveAndLoadManager.Instance.GetUserSetting().Fov);
+		AssignFootStepStreams(DataBaseManager.Instance.StreamLibrary["Normal"]["Walking"]);
 	}
 
 	private void SetSensitivity(float sensitivity) { _mouseSensitivity = sensitivity; }
@@ -76,4 +87,19 @@ public partial class Player : CharacterBody3D {
 			}
 		}
 	}
+
+
+	public void AssignFootStepStreams(AudioStream[] streams) {
+		AudioStreamRandomizer streamRandomizer = new AudioStreamRandomizer();
+
+		for(int i = 0; i < streams.Length; i++) {
+			streamRandomizer.AddStream(i, streams[i]);
+		}
+
+		_footstepPlayer.SetStream(streamRandomizer);
+	}
+
+	public void PlayFootstepSound() { _footstepPlayer.Play(); }
+
+	public bool IsFootstepActive() { return _footstepPlayer.IsPlaying(); }
 }

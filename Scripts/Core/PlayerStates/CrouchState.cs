@@ -62,6 +62,9 @@ public partial class CrouchState : State {
 
 		Manager.PlayerController.Velocity = Manager.PlayerController.CalcVelocity;
 		Manager.PlayerController.MoveAndSlide();
+		if(!Manager.PlayerController.IsFootstepActive()) {
+			Manager.PlayerController.PlayFootstepSound();
+		}
 	}
 
 
