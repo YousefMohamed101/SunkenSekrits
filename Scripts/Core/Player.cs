@@ -3,39 +3,47 @@ using System.Text.RegularExpressions;
 using Godot;
 
 public partial class Player : CharacterBody3D {
-	[Export] private AudioStreamPlayer3D _footstepPlayer;
-	[Export] private CanvasLayer _hudLayer;
+	[Export] private CameraController _cameraController;
+
+
+	[ExportGroup("Nodes")] [Export] private AudioStreamPlayer3D _footstepPlayer;
+
+	[Export] private Hud _hudLayer;
+	private string _interactText = "Press Interact";
 	[Export] private PackedScene _mainMenu;
-
-
 	private Vector2 _mousePosC;
 	private float _mouseSensitivity = 1.0f;
-	[Export] private Node3D _pitchNode;
 	private MainMenu _playerMainMenu;
+	[Export] private RayCast3D _rayCast;
 	private AudioStream[] _sounds;
-	[Export] private Node3D _yawNode;
-
 	[Export] public float BobbingAmplitude = 0.25f;
 	[Export] public float BobbingSpeed = 2.0f;
 	public Vector3 CalcVelocity;
 	public Marker3D CameraAnchoring;
+	private Interactable CurrentInteractable;
 	public float DefaultBsAmplitude;
 	[Export] public float FallSpeed = 5.0f;
 	[Export] public float JumpForce = 5.0f;
+	public Vector2 MousePosition;
+
+	//runtime 
 	public Vector2 MovementDirection;
 	public Vector3 MovementDirectionTranslation;
 
+
 	[ExportGroup("Player Stats")] [Export] public float MovementSpeed = 100f;
 
-
-	[ExportGroup("Nodes")] [Export] public NarcosisEffect NarcosisEffect;
-
+	[Export] public NarcosisEffect NarcosisEffect;
 	[Export] public Camera3D PlayerCamera;
+	[Export] public int Reach = 2; //in meters
 	[Export] public float SpeedMultiplier = 1.5f;
+
 
 	[ExportGroup("Managers")] [Export] public StateMachineManager StateManager;
 
-	[Export] public float SwayAmplitude = 2.0f;
+	[ExportGroup("Camera Settings")] [Export]
+	public float SwayAmplitude = 2.0f;
+
 	[Export] public float SwaySpeed = 2.0f;
 	[Export] public float SwimmingSpeed = 5.0f;
 	public float Timer;
@@ -45,14 +53,27 @@ public partial class Player : CharacterBody3D {
 		CameraAnchoring = GetNode<Marker3D>("CameraSmoothing");
 		Timer = 0.0f;
 		DefaultBsAmplitude = 0.0f;
+
+		//hud elements
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 		_playerMainMenu = _mainMenu.Instantiate<MainMenu>();
-		_hudLayer.Layer = 2;
 		_hudLayer.AddChild(_playerMainMenu);
 		_playerMainMenu.Visible = false;
 		_playerMainMenu.ProcessMode = ProcessModeEnum.Always;
+		_hudLayer.Layer = 2;
+		_hudLayer.InteractLabel.Visible = false;
+		_hudLayer.InteractLabel.Text = _interactText;
+		_hudLayer.InteractLabel.Position = (GetViewport().GetVisibleRect().Size / 2) - new Vector2(-3, 3);
+
+		//MousePosition = GetViewport().GetVisibleRect().Size / 2;
+		//physics
+		_rayCast.TargetPosition = Vector3.Forward * Reach;
+		//_rayCast.Position = new Vector3(MousePosition.X,MousePosition.Y,0);
+
+		//signals
 		GameManager.Instance.MouseSenseChanged += SetSensitivity;
 		GameManager.Instance.FovChanged += PlayerCamera.SetFov;
+
 		_mouseSensitivity = SaveAndLoadManager.Instance.GetUserSetting().MouseSensitivity;
 		PlayerCamera.SetFov(SaveAndLoadManager.Instance.GetUserSetting().Fov);
 		AssignFootStepStreams(DataBaseManager.Instance.StreamLibrary["Normal"]["Walking"]);
@@ -65,15 +86,27 @@ public partial class Player : CharacterBody3D {
 	public override void _PhysicsProcess(double delta) {
 		MovementDirection = Input.GetVector("Left_Movement", "Right_Movement", "Backward_Movement", "Forward_Movement");
 		//MovementDirectionTranslation = (Transform.Basis * new Vector3(MovementDirection.X, 0, -MovementDirection.Y)).Normalized();
-		MovementDirectionTranslation = MovementDirection.X * _yawNode.Basis.X - MovementDirection.Y * _yawNode.Basis.Z;
+		MovementDirectionTranslation = MovementDirection.X * _cameraController.Basis.X - MovementDirection.Y * _cameraController.Basis.Z;
+
+		GodotObject collider = _rayCast.GetCollider();
+		if(collider is Interactable i) {
+			CurrentInteractable = i;
+			_hudLayer.InteractLabel.Visible = true;
+		} else {
+			CurrentInteractable = null;
+			_hudLayer.InteractLabel.Visible = false;
+		}
 	}
 
 	public override void _Input(InputEvent @event) {
 		if(@event is InputEventMouseMotion eventMouseMotion) {
 			_mousePosC = (eventMouseMotion.Relative / 1080 * Mathf.Pi) * _mouseSensitivity;
-			_yawNode.RotateY(-_mousePosC.X);
-			float clampedPitch = Mathf.Clamp(_pitchNode.Rotation.X - _mousePosC.Y, -1.0f, 1.0f);
-			_pitchNode.Rotation = new Vector3(clampedPitch, _pitchNode.Rotation.Y, _pitchNode.Rotation.Z);
+			_cameraController.RotateCamera(-_mousePosC, 4.0f, -4.0f);
+		}
+
+		if(Input.IsActionPressed("Interact_Action") && CurrentInteractable != null) {
+			CurrentInteractable.Interact();
+			GetViewport().SetInputAsHandled();
 		}
 	}
 

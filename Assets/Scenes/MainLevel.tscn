@@ -1,9 +1,10 @@
-[gd_scene load_steps=15 format=3 uid="uid://ceuii5uyoayj0"]
+[gd_scene load_steps=17 format=3 uid="uid://ceuii5uyoayj0"]
 
 [ext_resource type="Script" uid="uid://cf123efmac170" path="res://Assets/Scenes/MainLevel.cs" id="1_bfd76"]
 [ext_resource type="PackedScene" uid="uid://cq6uahja8g6xc" path="res://Assets/Scenes/Player/Player.tscn" id="1_leg7y"]
 [ext_resource type="Texture2D" uid="uid://dc0ukfjmsskaj" path="res://Assets/Skyboxes/Panorama_Sky_05-512x512.png" id="1_xuups"]
 [ext_resource type="Script" uid="uid://i63ve70a4cox" path="res://Assets/Scenes/WaterTest.cs" id="2_0q8rr"]
+[ext_resource type="Script" uid="uid://cjang3wy8s67h" path="res://Assets/Scenes/Testbox.cs" id="3_8k4pf"]
 [ext_resource type="PackedScene" uid="uid://clvgjuakmxpbq" path="res://Debuging_Tools/EntityDebuger.tscn" id="3_ivefo"]
 
 [sub_resource type="Shader" id="Shader_bfd76"]
@@ -45,10 +46,12 @@ albedo_color = Color(0.581525, 0.531742, 0.190485, 1)
 [sub_resource type="PlaneMesh" id="PlaneMesh_leg7y"]
 material = SubResource("StandardMaterial3D_7k80c")
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_7k80c"]
-points = PackedVector3Array(-1, 0, -1, -1, 0, 1, 1, 0, -1, 1, 0, 1)
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_8k4pf"]
+points = PackedVector3Array(1.01587, 0.015873, 1.01587, -1.01587, -0.015873, -1.01587, -1.01587, 0.015873, -1.01587, 1.01587, -0.015873, -1.01587, -1.01587, -0.015873, 1.01587, -1.01587, 0.015873, 1.01587, 1.01587, 0.015873, -1.01587, 1.01587, -0.015873, 1.01587)
 
 [sub_resource type="BoxMesh" id="BoxMesh_leg7y"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8k4pf"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_leg7y"]
 
@@ -72,11 +75,12 @@ skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 transform = Transform3D(30, 0, 0, 0, 30, 0, 0, 0, 30, 0, 0, 0)
-shape = SubResource("ConvexPolygonShape3D_7k80c")
+shape = SubResource("ConvexPolygonShape3D_8k4pf")
 
 [node name="StaticBody3D2" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00714636, 0, -8.55603)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00714636, 0.731025, -8.55603)
 collision_mask = 0
+script = ExtResource("3_8k4pf")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
@@ -84,15 +88,15 @@ mesh = SubResource("BoxMesh_leg7y")
 skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D2"]
-transform = Transform3D(30, 0, 0, 0, 30, 0, 0, 0, 30, 0, 0, 0)
-shape = SubResource("ConvexPolygonShape3D_7k80c")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.486448, 0)
+shape = SubResource("BoxShape3D_8k4pf")
 
 [node name="Player" parent="." instance=ExtResource("1_leg7y")]
-JumpForce = 20.0
 SwayAmplitude = 0.05
 SwaySpeed = 5.0
 BobbingAmplitude = 0.1
 BobbingSpeed = 10.0
+JumpForce = 20.0
 
 [node name="PlayerView" parent="Player/Yaw/Pitch" index="0"]
 current = true

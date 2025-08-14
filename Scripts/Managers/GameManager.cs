@@ -15,6 +15,7 @@ public partial class GameManager : Node {
 	public bool gamepaused;
 	public bool gamestate;
 
+	/*
 	public override void _Notification(int what) {
 		if(what == NotificationApplicationFocusOut) {
 			gamepaused = true;
@@ -24,6 +25,7 @@ public partial class GameManager : Node {
 			GD.Print("Game paused");
 		}
 	}
+	*/
 
 	public override void _Ready() {
 		gamestate = false;
