@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using Godot;
 
 public partial class Player : CharacterBody3D {
-	[Export] private CameraController _cameraController;
+	[Export] public CameraController _cameraController;
 
 
 	[ExportGroup("Nodes")] [Export] private AudioStreamPlayer3D _footstepPlayer;
@@ -16,10 +16,12 @@ public partial class Player : CharacterBody3D {
 	private MainMenu _playerMainMenu;
 	[Export] private RayCast3D _rayCast;
 	private AudioStream[] _sounds;
+
+	public Car ActiveCar;
 	[Export] public float BobbingAmplitude = 0.25f;
 	[Export] public float BobbingSpeed = 2.0f;
 	public Vector3 CalcVelocity;
-	public Marker3D CameraAnchoring;
+	[Export] public Marker3D CameraAnchoring;
 	private Interactable CurrentInteractable;
 	public float DefaultBsAmplitude;
 	[Export] public float FallSpeed = 5.0f;
@@ -29,7 +31,6 @@ public partial class Player : CharacterBody3D {
 	//runtime 
 	public Vector2 MovementDirection;
 	public Vector3 MovementDirectionTranslation;
-
 
 	[ExportGroup("Player Stats")] [Export] public float MovementSpeed = 100f;
 
@@ -50,7 +51,7 @@ public partial class Player : CharacterBody3D {
 
 
 	public override void _Ready() {
-		CameraAnchoring = GetNode<Marker3D>("CameraSmoothing");
+		GD.Print(Position);
 		Timer = 0.0f;
 		DefaultBsAmplitude = 0.0f;
 
@@ -73,6 +74,7 @@ public partial class Player : CharacterBody3D {
 		//signals
 		GameManager.Instance.MouseSenseChanged += SetSensitivity;
 		GameManager.Instance.FovChanged += PlayerCamera.SetFov;
+		GameManager.Instance.RideCar += OnCarInteract;
 
 		_mouseSensitivity = SaveAndLoadManager.Instance.GetUserSetting().MouseSensitivity;
 		PlayerCamera.SetFov(SaveAndLoadManager.Instance.GetUserSetting().Fov);
@@ -86,7 +88,7 @@ public partial class Player : CharacterBody3D {
 	public override void _PhysicsProcess(double delta) {
 		MovementDirection = Input.GetVector("Left_Movement", "Right_Movement", "Backward_Movement", "Forward_Movement");
 		//MovementDirectionTranslation = (Transform.Basis * new Vector3(MovementDirection.X, 0, -MovementDirection.Y)).Normalized();
-		MovementDirectionTranslation = MovementDirection.X * _cameraController.Basis.X - MovementDirection.Y * _cameraController.Basis.Z;
+		MovementDirectionTranslation = MovementDirection.X * Basis.X - MovementDirection.Y * Basis.Z;
 
 		GodotObject collider = _rayCast.GetCollider();
 		if(collider is Interactable i) {
@@ -101,7 +103,7 @@ public partial class Player : CharacterBody3D {
 	public override void _Input(InputEvent @event) {
 		if(@event is InputEventMouseMotion eventMouseMotion) {
 			_mousePosC = (eventMouseMotion.Relative / 1080 * Mathf.Pi) * _mouseSensitivity;
-			_cameraController.RotateCamera(-_mousePosC, 4.0f, -4.0f);
+			_cameraController.RotateCamera(-_mousePosC, 1.0f, -1.0f);
 		}
 
 		if(Input.IsActionPressed("Interact_Action") && CurrentInteractable != null) {
@@ -119,6 +121,11 @@ public partial class Player : CharacterBody3D {
 				GetTree().Paused = true;
 			}
 		}
+	}
+
+	private void OnCarInteract(Car car) {
+		ActiveCar = car;
+		StateManager.TransitionToState("Driving");
 	}
 
 

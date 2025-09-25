@@ -462,7 +462,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 max_value = 180.0
-step = 0.1
 value = 75.0
 
 [node name="InvertControlsField" type="HBoxContainer" parent="CenterContainer/VBoxContainer/TabContainer/Game/MarginContainer/VBoxContainer"]

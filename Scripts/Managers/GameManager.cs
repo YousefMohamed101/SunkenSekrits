@@ -11,6 +11,9 @@ public partial class GameManager : Node {
 	[Signal]
 	public delegate void MouseSenseChangedEventHandler(float fov);
 
+	[Signal]
+	public delegate void RideCarEventHandler(Car car);
+
 	public static GameManager Instance;
 	public bool gamepaused;
 	public bool gamestate;

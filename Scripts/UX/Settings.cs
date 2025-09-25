@@ -17,6 +17,7 @@ public partial class Settings : Control {
 	private Button _btnBack;
 	private Button _btnDefaultSetting;
 	private Button _buttonKeybindSet;
+	private InputEventKey _emptyEvent;
 	private Label _FOVLabel;
 	private HSlider _FOVSlider;
 	private Label _frameLimitLabel;
@@ -43,7 +44,6 @@ public partial class Settings : Control {
 	private OptionButton _vsyncModeOptionButton;
 	private OptionButton _windowModeOptionButton;
 
-
 	public override void _Ready() {
 		//Audio tab Get Nodes
 		_masterVolumeLabel = GetNode<Label>("CenterContainer/VBoxContainer/TabContainer/Audio/MarginContainer/AudioContolBoard/MasterVolumeField/HBoxContainer2/MasterCounter");
@@ -57,10 +57,10 @@ public partial class Settings : Control {
 		_sfxVolumeSlider = GetNode<HSlider>("%SFXVolumeSlider");
 
 		//Audio tab Signal connect
-		_masterVolumeSlider.ValueChanged += value => AudioSlidersChange(value, 0);
-		_voiceVolumeSlider.ValueChanged += value => AudioSlidersChange(value, 1);
-		_bgmVolumeSlider.ValueChanged += value => AudioSlidersChange(value, 2);
-		_sfxVolumeSlider.ValueChanged += value => AudioSlidersChange(value, 3);
+		_masterVolumeSlider.ValueChanged += value => SetBusVolume(value, 0);
+		_voiceVolumeSlider.ValueChanged += value => SetBusVolume(value, 1);
+		_bgmVolumeSlider.ValueChanged += value => SetBusVolume(value, 2);
+		_sfxVolumeSlider.ValueChanged += value => SetBusVolume(value, 3);
 
 
 		//Game tab Get Nodes
@@ -95,7 +95,6 @@ public partial class Settings : Control {
 		_movementBinds = GetNode<VBoxContainer>("%MovementBinds");
 		_actionBinds = GetNode<VBoxContainer>("%ActionBinds");
 		_actionList = InputMap.GetActions();
-
 		KeyBindTabInit();
 
 
@@ -106,11 +105,11 @@ public partial class Settings : Control {
 
 		//Setting General function Signal Connection
 		_btnBack.Pressed += () => EmitSignal("SettingReturn");
-		_btnDefaultSetting.Pressed += SetDefaultSettingRuntime;
+		_btnDefaultSetting.Pressed += ApplyDefaultSettings;
 
 		//Load and initialize Settings
 		LoadUserSettings();
-		SetSettingRuntime(_userSettingData);
+		ApplySettings(_userSettingData);
 		GameManager.Instance.EmitSignal("FovChanged", (float)_FOVSlider.Value);
 		GameManager.Instance.EmitSignal("MouseSenseChanged", (float)_mouseSensitivitySlider.Value);
 	}
@@ -120,7 +119,8 @@ public partial class Settings : Control {
 		if(_isremaping) {
 			if(@event is InputEventKey eventKey && @event.IsPressed()) {
 				if(!IsKeyAvailable(@event)) {
-					SetKeybind(_actionNa, null);
+					SetKeybind(_actionNa, _emptyEvent);
+					AcceptEvent();
 				}
 
 				SetKeybind(_actionToSet, @event);
@@ -136,6 +136,7 @@ public partial class Settings : Control {
 
 				if(!IsKeyAvailable(@event)) {
 					SetKeybind(_actionNa, null);
+					AcceptEvent();
 				}
 
 
@@ -147,6 +148,8 @@ public partial class Settings : Control {
 				_actionToSet = null;
 				AcceptEvent();
 			}
+
+			AcceptEvent();
 		}
 	}
 
@@ -156,14 +159,14 @@ public partial class Settings : Control {
 
 
 	// System communication functions
-	private void SetDefaultSettingRuntime() { SetSettingRuntime(SaveAndLoadManager.Instance.GetDefaultSetting()); }
+	private void ApplyDefaultSettings() { ApplySettings(SaveAndLoadManager.Instance.GetDefaultSetting()); }
 
 	// Function to set and initialize all setting and update the system
-	private void SetSettingRuntime(SettingData setting) {
-		AudioSlidersChange(setting.MasterVolume, 0);
-		AudioSlidersChange(setting.VoicesVolume, 1);
-		AudioSlidersChange(setting.BgmVolume, 2);
-		AudioSlidersChange(setting.SfxVolume, 3);
+	private void ApplySettings(SettingData setting) {
+		SetBusVolume(setting.MasterVolume, 0);
+		SetBusVolume(setting.VoicesVolume, 1);
+		SetBusVolume(setting.BgmVolume, 2);
+		SetBusVolume(setting.SfxVolume, 3);
 		SetFrameLimitSlider(setting.FrameLimit);
 		SetVSync(setting.VSync);
 		SetWindowModeOptionButton(setting.WindowModeIndex);
@@ -188,7 +191,7 @@ public partial class Settings : Control {
 
 	// Audio tab Functions
 	// Set Audio buses volume and  Saves the data
-	private void AudioSlidersChange(double change, int index) {
+	private void SetBusVolume(double change, int index) {
 		_uisfx.Stream = _audioStream;
 		_uisfx.Play();
 		AudioServer.SetBusVolumeDb(index, Mathf.LinearToDb((float)change));
@@ -381,7 +384,7 @@ public partial class Settings : Control {
 		if(_isremaping == false) {
 			_isremaping = true;
 			_actionToSet = action;
-			if(InputMap.ActionGetEvents(action).Count > 0) {
+			if(InputMap.ActionGetEvents(action).Any()) {
 				_previousEvent = InputMap.ActionGetEvents(action)[0];
 				InputMap.ActionEraseEvents(action);
 			}
@@ -392,7 +395,7 @@ public partial class Settings : Control {
 	}
 
 	private void SetKeybind(StringName action, InputEvent @event) {
-		if(InputMap.ActionGetEvents(action).Count() > 0) {
+		if(InputMap.ActionGetEvents(action).Any()) {
 			InputMap.ActionEraseEvents(action);
 		}
 
@@ -444,6 +447,7 @@ public partial class Settings : Control {
 				break;
 		}
 
+		Input.ActionRelease(action);
 		SaveAndLoadManager.Instance.SaveUserSetting(_userSettingData);
 	}
 

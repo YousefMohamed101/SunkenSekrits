@@ -1,5 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://c1ws2thvf1qrq"]
-
-[ext_resource type="PackedScene" uid="uid://bv2n0qrowx6tk" path="res://Assets/3DModels/Terrain/Menu_Beach/Menu_Beach.glb" id="1_mu5hx"]
-
-[node name="Menu_Beach" instance=ExtResource("1_mu5hx")]
