@@ -5,16 +5,11 @@ using Godot;
 public partial class Player : CharacterBody3D {
 	[Export] public CameraController _cameraController;
 
-
 	[ExportGroup("Nodes")] [Export] private AudioStreamPlayer3D _footstepPlayer;
-
-	[Export] private Hud _hudLayer;
-	private string _interactText = "Press Interact";
 	[Export] private PackedScene _mainMenu;
 	private Vector2 _mousePosC;
 	private float _mouseSensitivity = 1.0f;
 	private MainMenu _playerMainMenu;
-	[Export] private RayCast3D _rayCast;
 	private AudioStream[] _sounds;
 
 	public Car ActiveCar;
@@ -22,9 +17,14 @@ public partial class Player : CharacterBody3D {
 	[Export] public float BobbingSpeed = 2.0f;
 	public Vector3 CalcVelocity;
 	[Export] public Marker3D CameraAnchoring;
-	private Interactable CurrentInteractable;
+	public Interactable CurrentInteractable;
 	public float DefaultBsAmplitude;
+	[Export] public DialogueHud DialogueHud;
 	[Export] public float FallSpeed = 5.0f;
+	[Export] private Marker3D GLowHold;
+	[Export] public RayCast3D GroundRayCast;
+	[Export] public Hud HudLayer;
+	public string InteractText = "Press Interact";
 	[Export] public float JumpForce = 5.0f;
 	public Vector2 MousePosition;
 
@@ -36,46 +36,74 @@ public partial class Player : CharacterBody3D {
 
 	[Export] public NarcosisEffect NarcosisEffect;
 	[Export] public Camera3D PlayerCamera;
+	[Export] public RayCast3D RayCast;
 	[Export] public int Reach = 2; //in meters
 	[Export] public float SpeedMultiplier = 1.5f;
 
 
 	[ExportGroup("Managers")] [Export] public StateMachineManager StateManager;
 
+
+	private GlowStick stick;
+
 	[ExportGroup("Camera Settings")] [Export]
 	public float SwayAmplitude = 2.0f;
 
 	[Export] public float SwaySpeed = 2.0f;
 	[Export] public float SwimmingSpeed = 5.0f;
+	[Export] private Vector3 ThrowDirection;
+	[Export] private float ThrowForce;
 	public float Timer;
 
 
+	public void EquipGlowstick(GlowStick sticks) {
+		if(stick != null) {
+			return;
+		}
+
+		GD.Print("EquipGlowstick");
+		stick = sticks;
+		stick.GlobalPosition = GLowHold.GlobalPosition;
+		stick.GlobalRotation = GLowHold.GlobalRotation;
+		stick.Reparent(GLowHold);
+	}
+
+	public void EquipGear(FullGear gear) {
+		gear.GlobalPosition = GlobalPosition;
+		gear.GlobalRotation = GlobalRotation;
+
+		gear.RotateY((float)(Math.PI));
+		gear.Reparent(this);
+	}
+
+
 	public override void _Ready() {
-		GD.Print(Position);
 		Timer = 0.0f;
 		DefaultBsAmplitude = 0.0f;
+		stick = null;
 
 		//hud elements
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 		_playerMainMenu = _mainMenu.Instantiate<MainMenu>();
-		_hudLayer.AddChild(_playerMainMenu);
+		HudLayer.AddChild(_playerMainMenu);
 		_playerMainMenu.Visible = false;
 		_playerMainMenu.ProcessMode = ProcessModeEnum.Always;
-		_hudLayer.Layer = 2;
-		_hudLayer.InteractLabel.Visible = false;
-		_hudLayer.InteractLabel.Text = _interactText;
-		_hudLayer.InteractLabel.Position = (GetViewport().GetVisibleRect().Size / 2) - new Vector2(-3, 3);
+		HudLayer.Layer = 2;
+		HudLayer.InteractLabel.Visible = false;
+		HudLayer.InteractLabel.Text = InteractText;
+		HudLayer.InteractLabel.Position = (GetViewport().GetVisibleRect().Size / 2) - new Vector2(-3, 3);
 
 		//MousePosition = GetViewport().GetVisibleRect().Size / 2;
 		//physics
-		_rayCast.TargetPosition = Vector3.Forward * Reach;
+		RayCast.TargetPosition = Vector3.Forward * Reach;
 		//_rayCast.Position = new Vector3(MousePosition.X,MousePosition.Y,0);
 
 		//signals
 		GameManager.Instance.MouseSenseChanged += SetSensitivity;
 		GameManager.Instance.FovChanged += PlayerCamera.SetFov;
 		GameManager.Instance.RideCar += OnCarInteract;
-
+		GameManager.Instance.EquipGlowstick += EquipGlowstick;
+		GameManager.Instance.EquipGear += EquipGear;
 		_mouseSensitivity = SaveAndLoadManager.Instance.GetUserSetting().MouseSensitivity;
 		PlayerCamera.SetFov(SaveAndLoadManager.Instance.GetUserSetting().Fov);
 		AssignFootStepStreams(DataBaseManager.Instance.StreamLibrary["Normal"]["Walking"]);
@@ -89,15 +117,6 @@ public partial class Player : CharacterBody3D {
 		MovementDirection = Input.GetVector("Left_Movement", "Right_Movement", "Backward_Movement", "Forward_Movement");
 		//MovementDirectionTranslation = (Transform.Basis * new Vector3(MovementDirection.X, 0, -MovementDirection.Y)).Normalized();
 		MovementDirectionTranslation = MovementDirection.X * Basis.X - MovementDirection.Y * Basis.Z;
-
-		GodotObject collider = _rayCast.GetCollider();
-		if(collider is Interactable i) {
-			CurrentInteractable = i;
-			_hudLayer.InteractLabel.Visible = true;
-		} else {
-			CurrentInteractable = null;
-			_hudLayer.InteractLabel.Visible = false;
-		}
 	}
 
 	public override void _Input(InputEvent @event) {
@@ -106,9 +125,11 @@ public partial class Player : CharacterBody3D {
 			_cameraController.RotateCamera(-_mousePosC, 1.0f, -1.0f);
 		}
 
-		if(Input.IsActionPressed("Interact_Action") && CurrentInteractable != null) {
-			CurrentInteractable.Interact();
-			GetViewport().SetInputAsHandled();
+		if(Input.IsActionPressed("Use_Action")) {
+			if(stick != null) {
+				stick.ThrowItem((-CameraAnchoring.GlobalBasis.Z + ThrowDirection).Normalized() * ThrowForce);
+				stick = null;
+			}
 		}
 	}
 
@@ -140,6 +161,6 @@ public partial class Player : CharacterBody3D {
 	}
 
 	public void PlayFootstepSound() { _footstepPlayer.Play(); }
-
+	public void StopFootstepSound() { _footstepPlayer.Stop(); }
 	public bool IsFootstepActive() { return _footstepPlayer.IsPlaying(); }
 }

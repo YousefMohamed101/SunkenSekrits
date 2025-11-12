@@ -12,6 +12,8 @@ public partial class StateMachineManager : Node {
 
 	[Export] public NodePath InitialState {get; set;}
 
+	public string[] DialogueArray {get; set;}
+
 	public override void _Ready() {
 		PlayerController = GetParent<Player>();
 
@@ -28,6 +30,8 @@ public partial class StateMachineManager : Node {
 
 		_currentState = GetNode<State>(InitialState);
 		_currentState.Enter();
+
+		GameManager.Instance.DialogueActivated += OnDialogueActivated;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -45,5 +49,10 @@ public partial class StateMachineManager : Node {
 		_currentState.Exit();
 		_currentState = _states[newState];
 		_currentState.Enter();
+	}
+
+	public void OnDialogueActivated(string[] dialogue) {
+		DialogueArray = dialogue;
+		TransitionToState("Dialogue");
 	}
 }

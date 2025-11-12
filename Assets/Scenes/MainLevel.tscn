@@ -1,12 +1,14 @@
-[gd_scene load_steps=18 format=3 uid="uid://ceuii5uyoayj0"]
+[gd_scene load_steps=25 format=3 uid="uid://ceuii5uyoayj0"]
 
 [ext_resource type="Script" uid="uid://cf123efmac170" path="res://Assets/Scenes/MainLevel.cs" id="1_bfd76"]
 [ext_resource type="PackedScene" uid="uid://cq6uahja8g6xc" path="res://Assets/Scenes/Player/Player.tscn" id="1_leg7y"]
 [ext_resource type="Texture2D" uid="uid://dc0ukfjmsskaj" path="res://Assets/Skyboxes/Panorama_Sky_05-512x512.png" id="1_xuups"]
 [ext_resource type="Script" uid="uid://i63ve70a4cox" path="res://Assets/Scenes/WaterTest.cs" id="2_0q8rr"]
 [ext_resource type="Script" uid="uid://cjang3wy8s67h" path="res://Assets/Scenes/Testbox.cs" id="3_8k4pf"]
-[ext_resource type="PackedScene" uid="uid://51qnb0qdl2sg" path="res://Assets/Scenes/optomized test gas/gas_stationopt.tscn" id="7_oc1nr"]
+[ext_resource type="PackedScene" uid="uid://51qnb0qdl2sg" path="res://Assets/3DModels/sea/Sea weed 1/SeaweeadOne.tscn" id="7_oc1nr"]
 [ext_resource type="PackedScene" uid="uid://2j5ablske16v" path="res://Assets/Scenes/Car/Car.tscn" id="8_2o1a6"]
+[ext_resource type="PackedScene" uid="uid://s21bm8etgd38" path="res://Assets/Scenes/divingguardhouse/diving_guard_house.tscn" id="8_yx5xw"]
+[ext_resource type="PackedScene" uid="uid://yoey5b5px8wk" path="res://Assets/Scenes/Oxygen_Gauge/full_gear.tscn" id="9_yx5xw"]
 
 [sub_resource type="Shader" id="Shader_bfd76"]
 code = "
@@ -56,6 +58,144 @@ data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_leg7y"]
 
+[sub_resource type="Shader" id="Shader_oc1nr"]
+code = "shader_type spatial;
+render_mode diffuse_lambert;
+
+uniform vec4 primarycolor: source_color;
+uniform float roughness = 0.2;
+uniform vec4 color_deep : source_color;
+uniform vec4 color_shallow : source_color;
+uniform float beers_law = 2.0;
+uniform float depth_offset = -0.75;
+uniform sampler2D depth_texture : hint_depth_texture, repeat_disable;
+uniform sampler2D screen_texture : hint_screen_texture, repeat_disable;
+uniform sampler2D NoiseA : hint_normal;
+
+uniform vec4 WaveA;
+uniform vec4 WaveB;
+uniform vec4 WaveC;
+
+uniform vec4 foam_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
+uniform float foam_amount = 0.5;
+uniform float foam_cutoff = 0.7;
+uniform float foam_edge_distance = 0.4;
+uniform float foam_tiling = 4.0;
+
+varying float wave_height;
+
+vec3 GerstnerWave(vec4 wave, vec3 coord, inout vec3 tangent, inout vec3 binormal){
+	float steep = wave.z;
+	float wavelength = wave.w;
+	float k = 2.0 * PI / wavelength;
+	float c = sqrt(9.8 / k);
+	vec2 d = normalize(wave.xy);
+	float a = steep / k;
+	float f = k * (dot(d, coord.xz) - TIME * c);
+
+	tangent += vec3(
+		-d.x * d.x * (steep * sin(f)),
+		d.x * (steep * cos(f)),
+		-d.x * d.y * (steep * sin(f))
+	);
+
+	binormal += vec3(
+		-d.x * d.y * (steep * sin(f)),
+		d.y * (steep * cos(f)),
+		-d.y * d.y * (steep * sin(f))
+	);
+
+	return vec3(
+		d.x * (a * cos(f)),
+		a * sin(f),
+		d.y * (a * cos(f))
+	);
+}
+
+float fresnelpow(float amount, vec3 normal, vec3 view){
+	return pow((1.0 - clamp(dot(normalize(normal), normalize(view)), 0.0, 1.0)), amount);
+}
+
+void vertex() {
+	// Initialize tangent and binormal
+	TANGENT = vec3(1.0, 0.0, 0.0);
+	BINORMAL = vec3(0.0, 0.0, 1.0);
+	vec3 world_pos = (MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;
+	VERTEX += GerstnerWave(WaveA, world_pos, TANGENT, BINORMAL);
+	VERTEX += GerstnerWave(WaveB, world_pos, TANGENT, BINORMAL);
+	VERTEX += GerstnerWave(WaveC, world_pos, TANGENT, BINORMAL);
+
+	wave_height = VERTEX.y;
+
+	NORMAL = normalize(cross(BINORMAL, TANGENT));
+}
+
+void fragment(){
+	float fresnel = fresnelpow(5.0, NORMAL, VIEW);
+
+	float depth = texture(depth_texture, SCREEN_UV).r;
+	depth = depth * 2.0 - 1.0;
+	vec3 ndc = vec3(SCREEN_UV*2.0-1.0,depth);
+	vec4 world = INV_VIEW_MATRIX*INV_PROJECTION_MATRIX *vec4(ndc,1.0);
+	float depth_texture_y = world.y/world.w;
+	float vertex_y = (INV_VIEW_MATRIX* vec4(VERTEX,1.0)).y;
+	float depth_blend = clamp((vertex_y -depth_texture_y / depth_offset),0.0,1.0);
+	depth_blend = exp(-depth_blend*beers_law);
+	float depth_blend_power = clamp(pow(depth_blend, 2.5), 0.0, 1.0);
+
+	vec3 screen_color = textureLod(screen_texture, SCREEN_UV,depth_blend).rgb;
+	vec3 depth_color = mix(color_shallow.rgb, color_deep.rgb, depth_blend);
+	vec3 color = mix(depth_color.rgb, screen_color, 0.2);
+	float foam_wave = smoothstep(foam_cutoff, 1.0, wave_height * foam_amount);
+	float foam_edge = smoothstep(0.0, foam_edge_distance, depth_blend_power);
+	foam_edge = 1.0 - foam_edge;
+	vec2 foam_uv = UV * foam_tiling + vec2(TIME * 0.1, TIME * 0.05);
+	float foam_tex = texture(NoiseA, foam_uv*10.0).r;
+	float foam_final = max(foam_wave, foam_edge) * foam_tex;
+	vec3 surface_color = primarycolor.rgb + (0.2 * fresnel);
+	ALBEDO =  mix(surface_color, foam_color.rgb, foam_final);
+	ROUGHNESS = roughness;
+	METALLIC = 0.0;
+}"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_oc1nr"]
+noise_type = 0
+frequency = 0.0035
+fractal_type = 2
+fractal_octaves = 10
+fractal_lacunarity = 0.405
+fractal_weighted_strength = 1.0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_2o1a6"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_oc1nr")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wa8bp"]
+render_priority = 0
+shader = SubResource("Shader_oc1nr")
+shader_parameter/primarycolor = Color(0, 0.25098, 0.396078, 1)
+shader_parameter/roughness = 0.2
+shader_parameter/color_deep = Color(0, 0, 0, 1)
+shader_parameter/color_shallow = Color(0, 0.641865, 0.667674, 1)
+shader_parameter/beers_law = 2.0
+shader_parameter/depth_offset = 5.0
+shader_parameter/NoiseA = SubResource("NoiseTexture2D_2o1a6")
+shader_parameter/WaveA = Vector4(0.6, 1, 0.009, 60)
+shader_parameter/WaveB = Vector4(0.1, 0.1, 0.009, 30)
+shader_parameter/WaveC = Vector4(-0.5, -1, 0.005, 30)
+shader_parameter/foam_color = Color(1, 1, 1, 1)
+shader_parameter/foam_amount = 6.435
+shader_parameter/foam_cutoff = 0.7
+shader_parameter/foam_edge_distance = 0.4
+shader_parameter/foam_tiling = 4.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_72rw5"]
+material = SubResource("ShaderMaterial_wa8bp")
+size = Vector2(2000, 2000)
+subdivide_width = 1000
+subdivide_depth = 1000
+
 [node name="PlaceHolder" type="Node3D"]
 script = ExtResource("1_bfd76")
 
@@ -70,7 +210,7 @@ shadow_enabled = true
 collision_mask = 0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
-transform = Transform3D(30, 0, 0, 0, 30, 0, 0, 0, 30, 3.88494, 0, -1.97292)
+transform = Transform3D(30, 0, 0, 0, 30, 0, 0, 0, 30, 0, 0, 0)
 mesh = SubResource("PlaneMesh_leg7y")
 skeleton = NodePath("../..")
 
@@ -80,8 +220,10 @@ shape = SubResource("ConcavePolygonShape3D_oc1nr")
 
 [node name="StaticBody3D2" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00714636, 0.731025, -8.55603)
+collision_layer = 5
 collision_mask = 0
 script = ExtResource("3_8k4pf")
+Dialogues = PackedStringArray("HI How Are you?", "Good Dialogue system")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
@@ -106,17 +248,33 @@ transform = Transform3D(500, 0, 0, 0, 500, 0, 0, 0, 500, 0, -260, 0)
 shape = SubResource("BoxShape3D_leg7y")
 
 [node name="GasStationopt" parent="." instance=ExtResource("7_oc1nr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.5484, 0.576192, 23.3738)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.76793, 0.100003, 19.7216)
 
 [node name="Car" parent="." instance=ExtResource("8_2o1a6")]
-transform = Transform3D(0.0513868, 0, -0.557637, 0, 0.56, 0, 0.557637, 0, 0.0513868, -1.72072, 0, -3.35654)
+transform = Transform3D(0.0513868, 0, -0.557637, 0, 0.56, 0, 0.557637, 0, 0.0513868, 5.74406, 0, -6.53652)
 axis_lock_angular_x = true
 
 [node name="Player" parent="." instance=ExtResource("1_leg7y")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.719929, -1.19209e-07, 0.642847)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.4756, 0, -2.56272)
 
-[node name="FootSteps" parent="Player" index="7"]
+[node name="CameraController" parent="Player" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.6, 1.93, -0.904)
+
+[node name="FootSteps" parent="Player" index="8"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12314, 0)
+
+[node name="Water2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -0.927383, 0)
+visible = false
+cast_shadow = 0
+gi_mode = 2
+mesh = SubResource("PlaneMesh_72rw5")
+
+[node name="DivingGuardHouse" parent="." instance=ExtResource("8_yx5xw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.9191, 0.0509927, -4.62935)
+
+[node name="FullGear" parent="." instance=ExtResource("9_yx5xw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.88524, 0.0509924, 3.69191)
 
 [editable path="Car"]
 [editable path="Player"]

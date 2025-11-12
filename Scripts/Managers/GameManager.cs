@@ -3,6 +3,18 @@ using System;
 
 public partial class GameManager : Node {
 	[Signal]
+	public delegate void DialgueEndedEventHandler();
+
+	[Signal]
+	public delegate void DialogueActivatedEventHandler(string[] dialogue);
+
+	[Signal]
+	public delegate void EquipGearEventHandler(FullGear gear);
+
+	[Signal]
+	public delegate void EquipGlowstickEventHandler(GlowStick stick);
+
+	[Signal]
 	public delegate void FovChangedEventHandler(float fov);
 
 	[Signal]
@@ -13,6 +25,7 @@ public partial class GameManager : Node {
 
 	[Signal]
 	public delegate void RideCarEventHandler(Car car);
+
 
 	public static GameManager Instance;
 	public bool gamepaused;
