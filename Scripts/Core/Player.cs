@@ -21,6 +21,8 @@ public partial class Player : CharacterBody3D {
 	public float DefaultBsAmplitude;
 	[Export] public DialogueHud DialogueHud;
 	[Export] public float FallSpeed = 5.0f;
+
+	[Export] private Marker3D GearSlot;
 	[Export] private Marker3D GLowHold;
 	[Export] public RayCast3D GroundRayCast;
 	[Export] public Hud HudLayer;
@@ -69,10 +71,10 @@ public partial class Player : CharacterBody3D {
 	}
 
 	public void EquipGear(FullGear gear) {
-		gear.GlobalPosition = GlobalPosition;
-		gear.GlobalRotation = GlobalRotation;
+		gear.GlobalPosition = GearSlot.GlobalPosition;
+		gear.GlobalRotation = GearSlot.GlobalRotation;
 
-		gear.RotateY((float)(Math.PI));
+
 		gear.Reparent(this);
 	}
 
